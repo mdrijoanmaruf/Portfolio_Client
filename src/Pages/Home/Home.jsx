@@ -1,8 +1,8 @@
 import React from 'react';
 import Intro from './Intro/Intro';
-import AboutMe from './AboutMe';
-import Education from './Education';
-import ContactMe from './ContactMe';
+import AboutMe from './AboutMe/AboutMe';
+import Education from './Education/Education';
+import ContactMe from './ContactMe/ContactMe';
 
 const Home = () => {
   return (
