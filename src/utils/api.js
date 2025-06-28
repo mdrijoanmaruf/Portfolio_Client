@@ -1,5 +1,5 @@
 // API configuration
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://server-theta-roan.vercel.app/api';
 
 // Helper function for making API requests
 const apiRequest = async (endpoint, options = {}) => {
@@ -82,7 +82,7 @@ export const serverAPI = {
     }
   }).catch(() => {
     // If projects endpoint fails, try base URL
-    return fetch('http://localhost:5000').then(res => res.json());
+    return fetch('https://server-theta-roan.vercel.app').then(res => res.json());
   }),
 };
 
