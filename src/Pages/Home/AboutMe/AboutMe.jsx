@@ -5,7 +5,6 @@ import PersonalIntro from './PersonalIntro'
 import Highlights from './Highlights'
 import CallToAction from './CallToAction'
 import SkillsSection from './SkillsSection'
-import StatsSection from './StatsSection'
 
 const AboutMe = () => {
   // Animation variants
@@ -54,18 +53,17 @@ const AboutMe = () => {
         {/* Section Header */}
         <SectionHeader variants={itemVariants} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left Content */}
-          <div className="space-y-6">
+        <div className="space-y-16">
+          {/* Personal Introduction - Full Width */}
+          <div className="w-full space-y-8">
             <PersonalIntro variants={itemVariants} />
             <Highlights variants={itemVariants} cardVariants={cardVariants} />
             <CallToAction variants={itemVariants} />
           </div>
 
-          {/* Right Content - Skills */}
-          <div className="space-y-6">
+          {/* Skills Section - Full Width */}
+          <div className="w-full">
             <SkillsSection variants={itemVariants} cardVariants={cardVariants} />
-            <StatsSection variants={itemVariants} />
           </div>
         </div>
       </div>
