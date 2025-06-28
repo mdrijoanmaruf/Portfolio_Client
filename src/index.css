@@ -1,1 +1,194 @@
 @import "tailwindcss";
+
+/* Custom utility classes */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Additional responsive breakpoints */
+@media (min-width: 475px) {
+  .xs\:flex-row {
+    flex-direction: row;
+  }
+  
+  .xs\:flex-none {
+    flex: none;
+  }
+  
+  .xs\:min-w-\[120px\] {
+    min-width: 120px;
+  }
+  
+  .xs\:inline {
+    display: inline;
+  }
+  
+  .xs\:hidden {
+    display: none;
+  }
+  
+  .xs\:self-auto {
+    align-self: auto;
+  }
+  
+  .xs\:w-auto {
+    width: auto;
+  }
+}
+
+/* Grid system improvements for very small screens */
+@media (max-width: 374px) {
+  .grid-cols-1 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Enhanced touch targets for mobile */
+@media (max-width: 768px) {
+  button, a[role="button"], .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improved tap highlight */
+  button, a {
+    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
+  }
+  
+  /* Better spacing for mobile */
+  .mobile-spacing {
+    padding: 0.5rem;
+  }
+  
+  /* Improved touch scroll */
+  .touch-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Extra small devices specific styles */
+@media (max-width: 374px) {
+  /* Even more compact spacing */
+  .xs-compact {
+    padding: 0.25rem;
+  }
+  
+  /* Ensure minimum touch targets */
+  button {
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* Focus states for accessibility */
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
+  outline: 2px solid rgb(59, 130, 246);
+  outline-offset: 2px;
+}
+
+/* Enhanced card animations */
+.project-card {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Backdrop blur enhancement */
+.backdrop-blur-lg {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Custom gradient borders */
+.gradient-border {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(16, 185, 129, 0.3));
+  padding: 1px;
+  border-radius: 1rem;
+}
+
+.gradient-border > div {
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: calc(1rem - 1px);
+}
+
+/* Smooth image transitions */
+.image-scale {
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glow effects */
+.glow-effect {
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1),
+              0 4px 25px rgba(59, 130, 246, 0.1),
+              0 8px 50px rgba(59, 130, 246, 0.05);
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3),
+              0 8px 40px rgba(59, 130, 246, 0.2),
+              0 16px 80px rgba(59, 130, 246, 0.1);
+}
+
+/* Improved scrollbar for mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}

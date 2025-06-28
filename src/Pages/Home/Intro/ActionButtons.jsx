@@ -9,7 +9,10 @@ const ActionButtons = ({ variants, itemVariants }) => {
       className="flex flex-col sm:flex-row gap-3 lg:gap-4 pt-4"
       variants={itemVariants}
     >
-      <motion.button 
+      <motion.a 
+        href="https://drive.google.com/uc?export=download&id=1WP6pbZsR_x4b1qlqrzhEZiuDNmSFWqXe"
+        target="_blank"
+        rel="noopener noreferrer"
         className="group flex items-center justify-center space-x-2 px-6 py-3 lg:px-8 lg:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-cyan-700 shadow-lg hover:shadow-xl text-sm lg:text-base"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -23,7 +26,7 @@ const ActionButtons = ({ variants, itemVariants }) => {
         >
           <HiArrowRight className="h-3 w-3 lg:h-4 lg:w-4" />
         </motion.div>
-      </motion.button>
+      </motion.a>
       
       <motion.button 
         className="flex items-center justify-center space-x-2 px-6 py-3 lg:px-8 lg:py-4 border-2 border-blue-500 text-blue-400 rounded-lg font-medium hover:bg-blue-500 hover:text-white transition-all duration-300 text-sm lg:text-base"
