@@ -73,6 +73,30 @@ export const projectsAPI = {
   search: (query) => apiRequest(`/projects/search/${encodeURIComponent(query)}`),
 };
 
+// Coursework API functions
+export const courseworkAPI = {
+  // Get all coursework
+  getAll: () => apiRequest('/coursework'),
+
+  // Add new coursework (admin only)
+  create: (courseworkData) => apiRequest('/coursework', {
+    method: 'POST',
+    body: JSON.stringify(courseworkData),
+  }),
+
+  // Update coursework (admin only)
+  update: (id, courseworkData) => apiRequest(`/coursework/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(courseworkData),
+  }),
+
+  // Delete coursework (admin only)
+  delete: (id, userEmail) => apiRequest(`/coursework/${id}`, {
+    method: 'DELETE',
+    body: JSON.stringify({ userEmail }),
+  }),
+};
+
 // Server health check
 export const serverAPI = {
   healthCheck: () => apiRequest('', { 
