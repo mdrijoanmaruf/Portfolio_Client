@@ -2,6 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { FaDownload } from 'react-icons/fa'
 import { HiArrowRight } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
 
 const ActionButtons = ({ variants, itemVariants }) => {
   return (
@@ -28,6 +29,8 @@ const ActionButtons = ({ variants, itemVariants }) => {
         </motion.div>
       </motion.a>
       
+      <Link to='/projects'>
+      
       <motion.button 
         className="flex items-center justify-center space-x-2 px-6 py-3 lg:px-8 lg:py-4 border-2 border-blue-500 text-blue-400 rounded-lg font-medium hover:bg-blue-500 hover:text-white transition-all duration-300 text-sm lg:text-base"
         whileHover={{ scale: 1.05 }}
@@ -37,6 +40,7 @@ const ActionButtons = ({ variants, itemVariants }) => {
         <span>View Projects</span>
         <HiArrowRight className="h-3 w-3 lg:h-4 lg:w-4" />
       </motion.button>
+      </Link>
     </motion.div>
   )
 }
