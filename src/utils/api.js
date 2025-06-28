@@ -97,6 +97,30 @@ export const courseworkAPI = {
   }),
 };
 
+// Contact Form API functions
+export const contactsAPI = {
+  // Submit contact form
+  submit: (contactData) => apiRequest('/contacts', {
+    method: 'POST',
+    body: JSON.stringify(contactData),
+  }),
+
+  // Get all contacts (admin only)
+  getAll: (userEmail) => apiRequest(`/contacts?userEmail=${encodeURIComponent(userEmail)}`),
+
+  // Mark contact as read (admin only)
+  markAsRead: (id, userEmail) => apiRequest(`/contacts/${id}/read`, {
+    method: 'PUT',
+    body: JSON.stringify({ userEmail }),
+  }),
+
+  // Delete contact (admin only)
+  delete: (id, userEmail) => apiRequest(`/contacts/${id}`, {
+    method: 'DELETE',
+    body: JSON.stringify({ userEmail }),
+  }),
+};
+
 // Server health check
 export const serverAPI = {
   healthCheck: () => apiRequest('', { 

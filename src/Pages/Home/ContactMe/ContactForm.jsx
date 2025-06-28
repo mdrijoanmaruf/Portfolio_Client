@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaPaperPlane, FaUser, FaEnvelope, FaComment } from 'react-icons/fa'
 import { showSuccess, showError, showLoading } from '../../../utils/sweetAlerts'
+import { contactsAPI } from '../../../utils/api'
 
 const ContactForm = ({ variants }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -21,37 +21,41 @@ const ContactForm = ({ variants }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsSubmitting(true)
     
-    // Show loading alert
+    // Validation
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      showError('Validation Error', 'Please fill in all required fields')
+      return
+    }
+
+    setIsSubmitting(true)
     showLoading('Sending Message...', 'Please wait while we send your message')
     
     try {
-      // Simulate form submission
-      setTimeout(async () => {
-        try {
-          setIsSubmitting(false)
-          
-          // Show success message
-          await showSuccess(
-            'Message Sent Successfully!',
-            'Thank you for reaching out! I will get back to you as soon as possible.'
-          )
-          
-          // Clear form
-          setFormData({ name: '', email: '', subject: '', message: '' })
-        } catch (error) {
-          await showError(
-            'Failed to Send Message!',
-            'Something went wrong while sending your message. Please try again or contact me directly.'
-          )
-        }
-      }, 2000)
+      const response = await contactsAPI.submit({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        message: formData.message.trim()
+      })
+      
+      if (response.success) {
+        setIsSubmitting(false)
+        
+        // Show success message
+        await showSuccess(
+          'Message Sent Successfully!',
+          response.message || 'Thank you for reaching out! I will get back to you as soon as possible.'
+        )
+        
+        // Clear form
+        setFormData({ name: '', email: '', message: '' })
+      }
     } catch (error) {
       setIsSubmitting(false)
+      console.error('Error submitting contact form:', error)
       await showError(
         'Failed to Send Message!',
-        'Something went wrong while sending your message. Please try again or contact me directly.'
+        error.message || 'Something went wrong while sending your message. Please try again or contact me directly.'
       )
     }
   }
@@ -95,22 +99,6 @@ const ContactForm = ({ variants }) => {
               required
               className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
               placeholder="your.email@example.com"
-            />
-          </div>
-
-          {/* Subject Input */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Subject
-            </label>
-            <input
-              type="text"
-              name="subject"
-              value={formData.subject}
-              onChange={handleInputChange}
-              required
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-              placeholder="What's this about?"
             />
           </div>
 

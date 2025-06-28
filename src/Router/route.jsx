@@ -4,6 +4,7 @@ import Home from "../Pages/Home/Home";
 import AddProject from "../Pages/AddProject/AddProject";
 import ProjectsList from "../Pages/ProjectsList/ProjectsList";
 import ProjectDetails from "../Pages/ProjectDetails/ProjectDetails";
+import Admin from "../Pages/Admin/Admin";
 import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
@@ -28,6 +29,14 @@ export const router = createBrowserRouter([
                 element: (
                     <PrivateRoute>
                         <AddProject />
+                    </PrivateRoute>
+                )
+            },
+            {
+                path: '/admin',
+                element: (
+                    <PrivateRoute>
+                        <Admin />
                     </PrivateRoute>
                 )
             }
