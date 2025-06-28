@@ -87,7 +87,7 @@ const FeaturedProject = () => {
   }
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24  to-slate-900 relative overflow-hidden">
+    <section className="py-16 sm:py-20 lg:py-24 relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
