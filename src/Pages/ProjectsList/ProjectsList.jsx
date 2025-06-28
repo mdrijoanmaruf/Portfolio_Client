@@ -5,6 +5,7 @@ import { MdGridView, MdViewList } from 'react-icons/md'
 import { projectsAPI } from '../../utils/api'
 import useAuth from '../../Hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
+import { deleteProject, showSuccess, showError, handleFeatureToggle } from '../../utils/sweetAlerts'
 
 const ProjectsList = () => {
   const [projects, setProjects] = useState([])
@@ -37,10 +38,18 @@ const ProjectsList = () => {
         setError(null)
       } else {
         setError('Failed to fetch projects')
+        await showError(
+          'Failed to Load Projects!',
+          response.message || 'Unable to load projects from the server. Please try again.'
+        )
       }
     } catch (err) {
       setError('Error fetching projects')
       console.error('Error:', err)
+      await showError(
+        'Connection Error!',
+        'Unable to connect to the server. Please check your internet connection and try again.'
+      )
     } finally {
       setLoading(false)
     }
@@ -87,19 +96,53 @@ const ProjectsList = () => {
   }
 
   const handleDelete = async (projectId) => {
-    if (window.confirm('Are you sure you want to delete this project?')) {
+    // Find the project to get its title
+    const project = projects.find(p => p._id === projectId)
+    const projectTitle = project?.title || 'this project'
+    
+    const result = await deleteProject(projectTitle)
+    
+    if (result.isConfirmed) {
       try {
         const response = await projectsAPI.delete(projectId)
         if (response.success) {
           setProjects(projects.filter(p => p._id !== projectId))
           // Also update filtered projects
           setFilteredProjects(filteredProjects.filter(p => p._id !== projectId))
+          
+          await showSuccess(
+            'Project Deleted!', 
+            `"${projectTitle}" has been successfully deleted from your portfolio.`
+          )
+        } else {
+          await showError(
+            'Delete Failed!',
+            response.message || 'Failed to delete the project. Please try again.'
+          )
         }
       } catch (err) {
         console.error('Error deleting project:', err)
-        alert('Error deleting project. Please try again.')
+        await showError(
+          'Connection Error!',
+          'Unable to delete the project. Please check your connection and try again.'
+        )
       }
     }
+  }
+
+  const handleFeatureToggleClick = async (project) => {
+    const updateCallback = (projectId, updatedData) => {
+      // Update projects state
+      setProjects(prevProjects =>
+        prevProjects.map(p => p._id === projectId ? { ...p, ...updatedData } : p)
+      )
+      // Update filtered projects state
+      setFilteredProjects(prevFiltered =>
+        prevFiltered.map(p => p._id === projectId ? { ...p, ...updatedData } : p)
+      )
+    }
+    
+    await handleFeatureToggle(project, projectsAPI, updateCallback)
   }
 
   if (loading) {
@@ -265,6 +308,7 @@ const ProjectsList = () => {
                   onViewDetails={handleViewDetails}
                   onEdit={handleEdit}
                   onDelete={handleDelete}
+                  onFeatureToggle={handleFeatureToggleClick}
                 />
               ))}
             </motion.div>
@@ -275,7 +319,7 @@ const ProjectsList = () => {
   )
 }
 
-const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit, onDelete }) => {
+const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit, onDelete, onFeatureToggle }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -316,6 +360,20 @@ const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit,
         {/* Admin Controls Overlay */}
         {isAdmin && (
           <div className="absolute top-4 left-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onFeatureToggle(project);
+              }}
+              className={`p-2.5 backdrop-blur-sm text-white rounded-xl transition-all duration-200 shadow-lg ${
+                project.isFeatured 
+                  ? 'bg-yellow-600/90 hover:bg-yellow-500 hover:shadow-yellow-500/25' 
+                  : 'bg-gray-600/90 hover:bg-gray-500 hover:shadow-gray-500/25'
+              }`}
+              title={project.isFeatured ? "Remove from Featured" : "Add to Featured"}
+            >
+              <FaStar className="text-sm" />
+            </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();

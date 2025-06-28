@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaPaperPlane, FaUser, FaEnvelope, FaComment } from 'react-icons/fa'
+import { showSuccess, showError, showLoading } from '../../../utils/sweetAlerts'
 
 const ContactForm = ({ variants }) => {
   const [formData, setFormData] = useState({
@@ -22,12 +23,37 @@ const ContactForm = ({ variants }) => {
     e.preventDefault()
     setIsSubmitting(true)
     
-    // Simulate form submission
-    setTimeout(() => {
+    // Show loading alert
+    showLoading('Sending Message...', 'Please wait while we send your message')
+    
+    try {
+      // Simulate form submission
+      setTimeout(async () => {
+        try {
+          setIsSubmitting(false)
+          
+          // Show success message
+          await showSuccess(
+            'Message Sent Successfully!',
+            'Thank you for reaching out! I will get back to you as soon as possible.'
+          )
+          
+          // Clear form
+          setFormData({ name: '', email: '', subject: '', message: '' })
+        } catch (error) {
+          await showError(
+            'Failed to Send Message!',
+            'Something went wrong while sending your message. Please try again or contact me directly.'
+          )
+        }
+      }, 2000)
+    } catch (error) {
       setIsSubmitting(false)
-      alert('Message sent successfully!')
-      setFormData({ name: '', email: '', subject: '', message: '' })
-    }, 2000)
+      await showError(
+        'Failed to Send Message!',
+        'Something went wrong while sending your message. Please try again or contact me directly.'
+      )
+    }
   }
 
   return (

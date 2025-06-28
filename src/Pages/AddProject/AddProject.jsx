@@ -4,6 +4,7 @@ import { FaPlus, FaEdit } from 'react-icons/fa'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { projectsAPI } from '../../utils/api'
 import useAuth from '../../Hooks/useAuth'
+import Swal from 'sweetalert2'
 import { 
   FormHeader,
   ProjectDetailsSection, 
@@ -70,10 +71,42 @@ const AddProject = () => {
           } else {
             setSubmitStatus('error')
             console.error('Failed to load project:', response.message)
+            
+            // Show error alert for loading failure
+            await Swal.fire({
+              title: 'Error Loading Project!',
+              text: response.message || 'Failed to load project data. Please try again.',
+              icon: 'error',
+              confirmButtonColor: '#ef4444',
+              confirmButtonText: 'Go Back',
+              background: '#1e293b',
+              color: '#ffffff',
+              customClass: {
+                popup: 'border border-slate-600'
+              }
+            });
+            
+            navigate('/projects');
           }
         } catch (error) {
           console.error('Error loading project:', error)
           setSubmitStatus('error')
+          
+          // Show error alert for network/unexpected errors
+          await Swal.fire({
+            title: 'Connection Error!',
+            text: 'Unable to load project data. Please check your connection and try again.',
+            icon: 'error',
+            confirmButtonColor: '#ef4444',
+            confirmButtonText: 'Go Back',
+            background: '#1e293b',
+            color: '#ffffff',
+            customClass: {
+              popup: 'border border-slate-600'
+            }
+          });
+          
+          navigate('/projects');
         } finally {
           setIsLoading(false)
         }
@@ -81,7 +114,7 @@ const AddProject = () => {
     }
 
     loadProjectForEdit()
-  }, [isEditMode, editId, isAdmin])
+  }, [isEditMode, editId, isAdmin, navigate])
 
   // Don't render if not admin
   if (!isAdmin) {
@@ -115,22 +148,80 @@ const AddProject = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Show confirmation dialog before submitting
+    const result = await Swal.fire({
+      title: isEditMode ? 'Update Project?' : 'Add New Project?',
+      text: isEditMode 
+        ? 'Are you sure you want to update this project?' 
+        : 'Are you sure you want to add this project to your portfolio?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3b82f6',
+      cancelButtonColor: '#ef4444',
+      confirmButtonText: isEditMode ? 'Yes, update it!' : 'Yes, add it!',
+      cancelButtonText: 'Cancel',
+      background: '#1e293b',
+      color: '#ffffff',
+      customClass: {
+        popup: 'border border-slate-600'
+      }
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus(null);
 
+    // Show loading alert
+    Swal.fire({
+      title: isEditMode ? 'Updating Project...' : 'Adding Project...',
+      text: 'Please wait while we process your request',
+      icon: 'info',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      background: '#1e293b',
+      color: '#ffffff',
+      customClass: {
+        popup: 'border border-slate-600'
+      },
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     try {
-      let result;
+      let apiResult;
       
       if (isEditMode) {
         // Update existing project
-        result = await projectsAPI.update(editId, formData);
+        apiResult = await projectsAPI.update(editId, formData);
       } else {
         // Create new project
-        result = await projectsAPI.create(formData);
+        apiResult = await projectsAPI.create(formData);
       }
       
-      if (result.success) {
+      if (apiResult.success) {
         setSubmitStatus('success');
+        
+        // Show success alert
+        await Swal.fire({
+          title: 'Success!',
+          text: isEditMode 
+            ? 'Project has been updated successfully!' 
+            : 'Project has been added to your portfolio successfully!',
+          icon: 'success',
+          confirmButtonColor: '#10b981',
+          confirmButtonText: 'Great!',
+          background: '#1e293b',
+          color: '#ffffff',
+          customClass: {
+            popup: 'border border-slate-600'
+          }
+        });
         
         // Reset form if creating new project
         if (!isEditMode) {
@@ -146,16 +237,42 @@ const AddProject = () => {
           });
         }
         
-        // Redirect to projects list after successful operation
-        setTimeout(() => {
-          navigate('/projects');
-        }, 2000);
+        // Redirect to projects list
+        navigate('/projects');
       } else {
         setSubmitStatus('error');
+        
+        // Show error alert
+        await Swal.fire({
+          title: 'Error!',
+          text: apiResult.message || 'Something went wrong. Please try again.',
+          icon: 'error',
+          confirmButtonColor: '#ef4444',
+          confirmButtonText: 'Try Again',
+          background: '#1e293b',
+          color: '#ffffff',
+          customClass: {
+            popup: 'border border-slate-600'
+          }
+        });
       }
     } catch (error) {
       console.error('Error submitting project:', error);
       setSubmitStatus('error');
+      
+      // Show error alert
+      await Swal.fire({
+        title: 'Error!',
+        text: 'An unexpected error occurred. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+        confirmButtonText: 'Try Again',
+        background: '#1e293b',
+        color: '#ffffff',
+        customClass: {
+          popup: 'border border-slate-600'
+        }
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -249,33 +366,6 @@ const AddProject = () => {
                 />
               </div>
             </div>
-          {/* Responsive Grid Layout */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
-            
-            {/* Left Column - Project Details */}
-            <div className="space-y-6 sm:space-y-8">
-              <ProjectDetailsSection 
-                formData={formData} 
-                handleInputChange={handleInputChange} 
-              />
-            </div>
-
-            {/* Right Column - Links and Tags */}
-            <div className="space-y-6 sm:space-y-8">
-              <ProjectLinksSection 
-                formData={formData} 
-                handleInputChange={handleInputChange} 
-              />
-              
-              <ProjectTagsSection 
-                formData={formData}
-                currentTag={currentTag}
-                setCurrentTag={setCurrentTag}
-                addTag={addTag}
-                removeTag={removeTag}
-              />
-            </div>
-          </div>
 
             {/* Submit Button */}
             <div className="flex justify-center pt-6 sm:pt-8 border-t border-slate-600">
