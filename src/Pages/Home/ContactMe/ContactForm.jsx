@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
 import { FaPaperPlane, FaUser, FaEnvelope, FaComment } from 'react-icons/fa'
 import { showSuccess, showError, showLoading } from '../../../utils/sweetAlerts'
 import { contactsAPI } from '../../../utils/api'
 
-const ContactForm = ({ variants }) => {
+const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -61,7 +60,7 @@ const ContactForm = ({ variants }) => {
   }
 
   return (
-    <motion.div variants={variants}>
+    <div>
       <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8">
         <h3 className="text-2xl font-bold text-white mb-6">
           Send a <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Message</span>
@@ -120,12 +119,10 @@ const ContactForm = ({ variants }) => {
           </div>
 
           {/* Submit Button */}
-          <motion.button
+          <button
             type="submit"
             disabled={isSubmitting}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-medium shadow-lg hover:shadow-xl hover:scale-102 active:scale-98 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isSubmitting ? (
               <>
@@ -138,7 +135,7 @@ const ContactForm = ({ variants }) => {
                 Send Message
               </>
             )}
-          </motion.button>
+          </button>
         </form>
 
         {/* Form Footer */}
@@ -148,7 +145,7 @@ const ContactForm = ({ variants }) => {
           </p>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
