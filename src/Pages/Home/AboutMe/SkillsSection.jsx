@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { 
   FaReact, 
   FaNodeJs, 
@@ -17,7 +16,7 @@ import {
   SiFirebase
 } from 'react-icons/si'
 
-const SkillsSection = ({ variants }) => {
+const SkillsSection = () => {
   const skillCategories = [
     {
       title: 'Frontend',
@@ -43,47 +42,8 @@ const SkillsSection = ({ variants }) => {
     }
   ]
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  }
-
-  const categoryVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
-      }
-    }
-  }
-
-  const skillVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.4
-      }
-    }
-  }
-
   return (
-    <motion.div 
-      variants={variants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      className="space-y-8"
-    >
+    <div className="space-y-8">
       <div className="text-center">
         <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4">
           Technical <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Skills</span>
@@ -93,14 +53,10 @@ const SkillsSection = ({ variants }) => {
         </p>
       </div>
 
-      <motion.div 
-        variants={containerVariants}
-        className="space-y-6"
-      >
+      <div className="space-y-6">
         {skillCategories.map((category, categoryIndex) => (
-          <motion.div
+          <div
             key={category.title}
-            variants={categoryVariants}
             className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6"
           >
             <h4 className={`text-lg font-semibold mb-4 text-transparent bg-gradient-to-r ${category.color} bg-clip-text`}>
@@ -108,10 +64,8 @@ const SkillsSection = ({ variants }) => {
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {category.skills.map((skill, skillIndex) => (
-                <motion.div
+                <div
                   key={skill.name}
-                  variants={skillVariants}
-                  whileHover={{ scale: 1.05, y: -2 }}
                   className="flex flex-col items-center p-3 rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-all duration-300 group"
                 >
                   <skill.icon 
@@ -119,13 +73,13 @@ const SkillsSection = ({ variants }) => {
                     style={{ color: skill.color }}
                   />
                   <span className="text-sm text-gray-300 font-medium">{skill.name}</span>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   )
 }
 
