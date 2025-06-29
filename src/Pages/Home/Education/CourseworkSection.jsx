@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { FaCode, FaLaptopCode, FaDatabase, FaBook, FaPlus, FaEdit, FaTrash, FaSave, FaTimes } from 'react-icons/fa'
 import { MdComputer } from 'react-icons/md'
 import { courseworkAPI } from '../../../utils/api'
 import useAuth from '../../../Hooks/useAuth'
 import { showSuccess, showError, confirmAction } from '../../../utils/sweetAlerts'
 
-const CourseworkSection = ({ variants, cardVariants }) => {
+const CourseworkSection = () => {
   const [coursework, setCoursework] = useState([])
   const [loading, setLoading] = useState(true)
   const [showAddForm, setShowAddForm] = useState(false)
@@ -142,7 +141,7 @@ const CourseworkSection = ({ variants, cardVariants }) => {
 
   if (loading) {
     return (
-      <motion.div variants={variants} className="space-y-8">
+      <div className="space-y-8">
         <div className="text-center">
           <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4">
             Relevant <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Coursework</span>
@@ -151,26 +150,24 @@ const CourseworkSection = ({ variants, cardVariants }) => {
         <div className="flex justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         </div>
-      </motion.div>
+      </div>
     )
   }
 
   return (
-    <motion.div variants={variants} className="space-y-8">
+    <div className="space-y-8">
       <div className="text-center">
         <div className="flex items-center justify-center gap-4 mb-4">
           <h3 className="text-2xl lg:text-3xl font-bold text-white">
             Relevant <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Coursework</span>
           </h3>
           {isAdmin && (
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
+            <button
               onClick={() => setShowAddForm(true)}
-              className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+              className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white hover:shadow-lg hover:shadow-blue-500/25 hover:scale-110 active:scale-95 transition-all duration-300"
             >
               <FaPlus className="text-sm" />
-            </motion.button>
+            </button>
           )}
         </div>
         <p className="text-gray-400">
@@ -179,14 +176,8 @@ const CourseworkSection = ({ variants, cardVariants }) => {
       </div>
 
       {/* Add Form */}
-      <AnimatePresence>
         {showAddForm && isAdmin && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6"
-          >
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
             <h4 className="text-white font-semibold mb-4">Add New Course</h4>
             <div className="space-y-4">
               <input
@@ -229,28 +220,17 @@ const CourseworkSection = ({ variants, cardVariants }) => {
                 </button>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Coursework Grid */}
+          </div>
+        )}      {/* Coursework Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <AnimatePresence>
-          {coursework.map((course, index) => {
+        {coursework.map((course, index) => {
             const IconComponent = getRandomIcon()
             const isEditing = editingId === course._id
 
             return (
-              <motion.div
+              <div
                 key={course._id}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                layout
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: isEditing ? 1 : 1.05 }}
-                className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 hover:border-blue-500/50 rounded-xl p-6 transition-all duration-300 group"
+                className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 hover:border-blue-500/50 rounded-xl p-6 transition-all duration-300 group hover:scale-105"
               >
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
@@ -337,19 +317,14 @@ const CourseworkSection = ({ variants, cardVariants }) => {
                     )}
                   </div>
                 )}
-              </motion.div>
+              </div>
             )
           })}
-        </AnimatePresence>
       </div>
 
       {/* Empty State */}
       {coursework.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12"
-        >
+        <div className="text-center py-12">
           <FaBook className="text-4xl text-gray-500 mx-auto mb-4" />
           <p className="text-gray-400">No coursework added yet</p>
           {isAdmin && (
@@ -360,9 +335,9 @@ const CourseworkSection = ({ variants, cardVariants }) => {
               Add First Course
             </button>
           )}
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   )
 }
 

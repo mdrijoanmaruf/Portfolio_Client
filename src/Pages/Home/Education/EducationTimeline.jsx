@@ -1,9 +1,8 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { FaUniversity, FaCalendarAlt, FaMedal, FaStar } from 'react-icons/fa'
 import { MdSchool } from 'react-icons/md'
 
-const EducationTimeline = ({ variants, cardVariants }) => {
+const EducationTimeline = () => {
   const education = [
     {
       id: 1,
@@ -24,13 +23,11 @@ const EducationTimeline = ({ variants, cardVariants }) => {
   ]
 
   return (
-    <motion.div variants={variants} className="space-y-8">
+    <div className="space-y-8">
       {education.map((edu, index) => (
-        <motion.div
+        <div
           key={edu.id}
-          variants={cardVariants}
-          whileHover={{ scale: 1.02 }}
-          className="relative"
+          className="relative hover:scale-102 transition-transform duration-300"
         >
           {/* Timeline Line */}
           <div className="absolute left-8 top-20 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-cyan-500 opacity-50"></div>
@@ -80,25 +77,22 @@ const EducationTimeline = ({ variants, cardVariants }) => {
                   </h4>
                   <div className="grid sm:grid-cols-2 gap-2">
                     {edu.achievements.map((achievement, idx) => (
-                      <motion.div
+                      <div
                         key={idx}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 * idx }}
                         className="flex items-center gap-2 text-gray-300"
                       >
                         <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full flex-shrink-0"></div>
                         {achievement}
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   )
 }
 
