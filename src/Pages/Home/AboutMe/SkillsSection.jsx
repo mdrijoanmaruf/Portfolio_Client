@@ -44,7 +44,11 @@ const SkillsSection = () => {
 
   return (
     <div className="space-y-8">
-      <div className="text-center">
+      <div 
+        className="text-center"
+        data-aos="fade-up"
+        data-aos-duration="800"
+      >
         <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4">
           Technical <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Skills</span>
         </h3>
@@ -58,6 +62,9 @@ const SkillsSection = () => {
           <div
             key={category.title}
             className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6"
+            data-aos="fade-up"
+            data-aos-duration="800"
+            data-aos-delay={100 + categoryIndex * 100}
           >
             <h4 className={`text-lg font-semibold mb-4 text-transparent bg-gradient-to-r ${category.color} bg-clip-text`}>
               {category.title}
@@ -67,6 +74,9 @@ const SkillsSection = () => {
                 <div
                   key={skill.name}
                   className="flex flex-col items-center p-3 rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-all duration-300 group"
+                  data-aos="zoom-in"
+                  data-aos-duration="600"
+                  data-aos-delay={200 + categoryIndex * 100 + skillIndex * 50}
                 >
                   <skill.icon 
                     className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300"

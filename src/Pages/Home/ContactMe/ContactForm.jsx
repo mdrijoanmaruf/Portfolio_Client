@@ -61,14 +61,27 @@ const ContactForm = () => {
 
   return (
     <div>
-      <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8">
-        <h3 className="text-2xl font-bold text-white mb-6">
+      <div 
+        className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8"
+        data-aos="fade-up"
+        data-aos-duration="800"
+      >
+        <h3 
+          className="text-2xl font-bold text-white mb-6"
+          data-aos="fade-up"
+          data-aos-duration="600"
+          data-aos-delay="100"
+        >
           Send a <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Message</span>
         </h3>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name Input */}
-          <div>
+          <div
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay="200"
+          >
             <label className="block text-sm font-medium text-gray-300 mb-2">
               <FaUser className="inline mr-2" />
               Full Name
@@ -85,7 +98,11 @@ const ContactForm = () => {
           </div>
 
           {/* Email Input */}
-          <div>
+          <div
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay="300"
+          >
             <label className="block text-sm font-medium text-gray-300 mb-2">
               <FaEnvelope className="inline mr-2" />
               Email Address
@@ -102,7 +119,11 @@ const ContactForm = () => {
           </div>
 
           {/* Message Input */}
-          <div>
+          <div
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay="400"
+          >
             <label className="block text-sm font-medium text-gray-300 mb-2">
               <FaComment className="inline mr-2" />
               Message
@@ -123,6 +144,9 @@ const ContactForm = () => {
             type="submit"
             disabled={isSubmitting}
             className="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-medium shadow-lg hover:shadow-xl hover:scale-102 active:scale-98 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            data-aos="zoom-in"
+            data-aos-duration="600"
+            data-aos-delay="500"
           >
             {isSubmitting ? (
               <>
@@ -139,7 +163,12 @@ const ContactForm = () => {
         </form>
 
         {/* Form Footer */}
-        <div className="mt-6 pt-6 border-t border-slate-700">
+        <div 
+          className="mt-6 pt-6 border-t border-slate-700"
+          data-aos="fade-up"
+          data-aos-duration="600"
+          data-aos-delay="600"
+        >
           <p className="text-sm text-gray-400 text-center">
             I'll get back to you within 24 hours. Looking forward to connecting!
           </p>

@@ -43,7 +43,11 @@ const Highlights = () => {
 
   return (
     <div className="space-y-6">
-      <div className="text-center">
+      <div 
+        className="text-center"
+        data-aos="fade-up"
+        data-aos-duration="800"
+      >
         <h4 className="text-xl font-semibold text-white mb-2">What Drives Me</h4>
         <p className="text-gray-400">The values and principles that guide my work</p>
       </div>
@@ -53,6 +57,9 @@ const Highlights = () => {
           <div
             key={highlight.title}
             className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 p-6 hover:border-blue-500/50 transition-all duration-300"
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay={100 + index * 100}
           >
             {/* Gradient Background on Hover */}
             <div className={`absolute inset-0 bg-gradient-to-r ${highlight.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>

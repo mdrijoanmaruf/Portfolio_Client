@@ -11,8 +11,17 @@ const PersonalIntro = () => {
   return (
     <div className="space-y-8">
       {/* Main Introduction */}
-      <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50">
-        <div className="flex items-center space-x-4 mb-6">
+      <div 
+        className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50"
+        data-aos="fade-up"
+        data-aos-duration="800"
+      >
+        <div 
+          className="flex items-center space-x-4 mb-6"
+          data-aos="fade-right"
+          data-aos-duration="800"
+          data-aos-delay="100"
+        >
           <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
             <span className="text-white text-2xl font-bold">R</span>
           </div>
@@ -24,7 +33,12 @@ const PersonalIntro = () => {
           </div>
         </div>
         
-        <div className="space-y-4">
+        <div 
+          className="space-y-4"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="200"
+        >
           <p className="text-gray-300 text-base lg:text-lg leading-relaxed">
             I'm a passionate Full Stack Developer with over 1 year of experience creating digital solutions 
             that make a difference. My journey in tech started with curiosity and has evolved into a deep 
@@ -38,9 +52,20 @@ const PersonalIntro = () => {
         </div>
 
         {/* Personal Info Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+        <div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="300"
+        >
           {personalInfo.map((info, index) => (
-            <div key={index} className="flex items-center space-x-3 p-4 bg-slate-700/30 rounded-lg border border-slate-600/30">
+            <div 
+              key={index} 
+              className="flex items-center space-x-3 p-4 bg-slate-700/30 rounded-lg border border-slate-600/30"
+              data-aos="zoom-in"
+              data-aos-duration="600"
+              data-aos-delay={400 + index * 100}
+            >
               <info.icon className="text-blue-400 text-lg" />
               <div>
                 <p className="text-gray-400 text-sm">{info.label}</p>
@@ -51,7 +76,12 @@ const PersonalIntro = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-700/50">
+        <div 
+          className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-700/50"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="500"
+        >
           {[
             { number: "1+", label: "Years Experience" },
             { number: "15+", label: "Projects Completed" },
@@ -60,6 +90,9 @@ const PersonalIntro = () => {
             <div
               key={stat.label}
               className="text-center"
+              data-aos="flip-up"
+              data-aos-duration="600"
+              data-aos-delay={600 + index * 100}
             >
               <div className="text-2xl lg:text-3xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text mb-1">
                 {stat.number}

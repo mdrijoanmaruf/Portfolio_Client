@@ -28,8 +28,17 @@ const CallToAction = () => {
   ]
 
   return (
-    <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50">
-      <div className="text-center mb-6">
+    <div 
+      className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50"
+      data-aos="fade-up"
+      data-aos-duration="800"
+    >
+      <div 
+        className="text-center mb-6"
+        data-aos="fade-up"
+        data-aos-duration="800"
+        data-aos-delay="100"
+      >
         <h4 className="text-lg font-semibold text-white mb-2">Let's Work Together</h4>
         <p className="text-gray-400 text-sm">
           Ready to start your next project? Let's make it happen!
@@ -44,7 +53,12 @@ const CallToAction = () => {
             : { to: action.href }
 
           return (
-            <div key={action.label}>
+            <div 
+              key={action.label}
+              data-aos="zoom-in"
+              data-aos-duration="600"
+              data-aos-delay={200 + index * 100}
+            >
               <ActionComponent
                 {...linkProps}
                 className={`
@@ -73,7 +87,12 @@ const CallToAction = () => {
       </div>
 
       {/* Social proof or additional info */}
-      <div className="mt-6 pt-6 border-t border-slate-700/50 text-center">
+      <div 
+        className="mt-6 pt-6 border-t border-slate-700/50 text-center"
+        data-aos="fade-up"
+        data-aos-duration="800"
+        data-aos-delay="500"
+      >
         <p className="text-gray-400 text-xs">
           Available for freelance projects and full-time opportunities
         </p>

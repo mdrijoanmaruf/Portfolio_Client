@@ -25,7 +25,10 @@ const ContactInfo = () => {
 
   return (
     <div className="space-y-8">
-      <div>
+      <div
+        data-aos="fade-up"
+        data-aos-duration="800"
+      >
         <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6">
           Let's <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Connect</span>
         </h3>
@@ -40,6 +43,9 @@ const ContactInfo = () => {
           <div
             key={info.title}
             className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 hover:border-blue-500/50 rounded-xl p-6 transition-all duration-300 hover:scale-102"
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay={100 + index * 100}
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center flex-shrink-0">

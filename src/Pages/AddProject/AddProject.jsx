@@ -281,8 +281,17 @@ const AddProject = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-8 sm:py-12 lg:py-16 xl:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+        <div 
+          className="text-center mb-8 sm:mb-12"
+          data-aos="fade-up"
+          data-aos-duration="800"
+        >
+          <h1 
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4"
+            data-aos="fade-up"
+            data-aos-duration="800"
+            data-aos-delay="100"
+          >
             {isEditMode ? (
               <>
                 <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Edit</span> Project
@@ -293,7 +302,12 @@ const AddProject = () => {
               </>
             )}
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <p 
+            className="text-gray-400 text-lg max-w-2xl mx-auto"
+            data-aos="fade-up"
+            data-aos-duration="800"
+            data-aos-delay="200"
+          >
             {isEditMode 
               ? 'Update your project details and showcase your latest work'
               : 'Showcase your amazing work and add it to your portfolio collection'
@@ -303,7 +317,11 @@ const AddProject = () => {
 
         {/* Loading State */}
         {isLoading && (
-          <div className="flex items-center justify-center py-12">
+          <div 
+            className="flex items-center justify-center py-12"
+            data-aos="fade-in"
+            data-aos-duration="400"
+          >
             <div className="flex items-center gap-4 text-blue-400">
               <div className="relative">
                 <div className="w-8 h-8 border-2 border-transparent border-t-blue-500 border-r-cyan-400 rounded-full animate-spin"></div>
@@ -320,62 +338,78 @@ const AddProject = () => {
         )}
 
         {/* Submit Status */}
-        <SubmitStatus 
-          submitStatus={submitStatus} 
-          isEditMode={isEditMode}
-        />
+        <div
+          data-aos="fade-down"
+          data-aos-duration="600"
+        >
+          <SubmitStatus 
+            submitStatus={submitStatus} 
+            isEditMode={isEditMode}
+          />
+        </div>
 
         {/* Form */}
         {!isLoading && (
-          <form
-            onSubmit={handleSubmit}
-            className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 lg:space-y-10 mx-4 sm:mx-0"
+          <div
+            data-aos="fade-up"
+            data-aos-duration="800"
+            data-aos-delay="300"
           >
-            {/* Responsive Grid Layout */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
-              
-              {/* Left Column - Project Details */}
-              <div className="space-y-6 sm:space-y-8">
-                <ProjectDetailsSection 
-                  formData={formData} 
-                  handleInputChange={handleInputChange} 
-                />
-              </div>
-
-              {/* Right Column - Links and Tags */}
-              <div className="space-y-6 sm:space-y-8">
-                <ProjectLinksSection 
-                  formData={formData} 
-                  handleInputChange={handleInputChange} 
-                />
+            <form
+              onSubmit={handleSubmit}
+              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 lg:space-y-10 mx-4 sm:mx-0"
+            >
+              {/* Responsive Grid Layout */}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
                 
-                <ProjectTagsSection 
-                  formData={formData}
-                  currentTag={currentTag}
-                  setCurrentTag={setCurrentTag}
-                  addTag={addTag}
-                  removeTag={removeTag}
-                />
-              </div>
-            </div>
+                {/* Left Column - Project Details */}
+                <div className="space-y-6 sm:space-y-8">
+                  <ProjectDetailsSection 
+                    formData={formData} 
+                    handleInputChange={handleInputChange} 
+                  />
+                </div>
 
-            {/* Submit Button */}
-            <div className="flex justify-center pt-6 sm:pt-8 border-t border-slate-600">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 text-white rounded-xl font-bold text-base sm:text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                {/* Right Column - Links and Tags */}
+                <div className="space-y-6 sm:space-y-8">
+                  <ProjectLinksSection 
+                    formData={formData} 
+                    handleInputChange={handleInputChange} 
+                  />
+                  
+                  <ProjectTagsSection 
+                    formData={formData}
+                    currentTag={currentTag}
+                    setCurrentTag={setCurrentTag}
+                    addTag={addTag}
+                    removeTag={removeTag}
+                  />
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div 
+                className="flex justify-center pt-6 sm:pt-8 border-t border-slate-600"
+                data-aos="fade-up"
+                data-aos-duration="800"
+                data-aos-delay="400"
               >
-                {isEditMode ? <FaEdit className="text-lg sm:text-xl" /> : <FaPlus className="text-lg sm:text-xl" />}
-                <span className="text-sm sm:text-base lg:text-lg">
-                  {isSubmitting 
-                    ? (isEditMode ? 'Updating Project...' : 'Adding Project...') 
-                    : (isEditMode ? 'Update Project' : 'Add Project to Portfolio')
-                  }
-                </span>
-              </button>
-            </div>
-          </form>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 text-white rounded-xl font-bold text-base sm:text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 hover:scale-105 active:scale-95"
+                >
+                  {isEditMode ? <FaEdit className="text-lg sm:text-xl" /> : <FaPlus className="text-lg sm:text-xl" />}
+                  <span className="text-sm sm:text-base lg:text-lg">
+                    {isSubmitting 
+                      ? (isEditMode ? 'Updating Project...' : 'Adding Project...') 
+                      : (isEditMode ? 'Update Project' : 'Add Project to Portfolio')
+                    }
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
         )}
       </div>
     </div>

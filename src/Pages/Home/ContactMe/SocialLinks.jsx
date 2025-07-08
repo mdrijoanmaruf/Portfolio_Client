@@ -31,7 +31,13 @@ const SocialLinks = () => {
 
   return (
     <div className="space-y-4">
-      <h4 className="text-xl font-semibold text-white">Follow Me</h4>
+      <h4 
+        className="text-xl font-semibold text-white"
+        data-aos="fade-up"
+        data-aos-duration="800"
+      >
+        Follow Me
+      </h4>
       <div className="flex gap-4">
         {socialLinks.map((social, index) => (
           <a
@@ -40,6 +46,9 @@ const SocialLinks = () => {
             target="_blank"
             rel="noopener noreferrer"
             className={`w-12 h-12 bg-slate-800/50 border border-slate-700 rounded-lg flex items-center justify-center text-gray-400 ${social.color} hover:border-current hover:scale-110 transition-all duration-300`}
+            data-aos="zoom-in"
+            data-aos-duration="600"
+            data-aos-delay={100 + index * 100}
           >
             <social.icon className="text-lg" />
           </a>

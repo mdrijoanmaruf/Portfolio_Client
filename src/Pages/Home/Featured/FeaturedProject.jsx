@@ -3,6 +3,7 @@ import { FaEye, FaExternalLinkAlt, FaStar, FaLaptop, FaServer, FaGithub } from '
 import { useNavigate } from 'react-router-dom'
 import { projectsAPI } from '../../../utils/api'
 import Loading from '../../../Shared/LoadingAnimation/Loading'
+import ComponentLoading from '../../../Shared/LoadingAnimation/ComponentLoading'
 
 const FeaturedProject = () => {
   const [featuredProjects, setFeaturedProjects] = useState([])
@@ -46,7 +47,7 @@ const FeaturedProject = () => {
   }
 
   if (loading) {
-    return <Loading />
+    return <ComponentLoading></ComponentLoading>
   }
 
   if (error) {
@@ -93,7 +94,7 @@ const FeaturedProject = () => {
             <FaStar className="text-yellow-400 text-xl" />
             <span className="text-yellow-400 font-semibold uppercase tracking-wide text-sm">Featured Work</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
             Selected <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Projects</span>
           </h2>
           <p className="text-gray-400 text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed">
