@@ -7,23 +7,57 @@ import CallToAction from './CallToAction'
 
 const Education = () => {
   return (
-    <section className="py-16 lg:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-16">
+    <section className="min-h-screen mb-6">
+      <div className="max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="space-y-12 sm:space-y-16 lg:space-y-20">
           {/* Section Title */}
-          <SectionHeader />
+          <div 
+            data-aos="fade-up" 
+            data-aos-duration="800"
+            className="text-center"
+          >
+            <SectionHeader />
+          </div>
 
           {/* Education Timeline */}
-          <EducationTimeline />
+          <div 
+            data-aos="fade-right" 
+            data-aos-duration="1000" 
+            data-aos-delay="200"
+            className="w-full"
+          >
+            <EducationTimeline />
+          </div>
 
           {/* Relevant Coursework */}
-          <CourseworkSection />
+          <div 
+            data-aos="fade-left" 
+            data-aos-duration="1000" 
+            data-aos-delay="400"
+            className="w-full"
+          >
+            <CourseworkSection />
+          </div>
 
           {/* Academic Skills */}
-          <AcademicSkills />
+          <div 
+            data-aos="fade-up" 
+            data-aos-duration="1000" 
+            data-aos-delay="600"
+            className="w-full"
+          >
+            <AcademicSkills />
+          </div>
 
           {/* Call to Action */}
-          <CallToAction />
+          <div 
+            data-aos="zoom-in" 
+            data-aos-duration="800" 
+            data-aos-delay="800"
+            className="text-center pt-4 sm:pt-6 lg:pt-8"
+          >
+            <CallToAction />
+          </div>
         </div>
       </div>
     </section>

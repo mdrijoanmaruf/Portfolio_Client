@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import HeroImage from './HeroImage'
 import HeroContent from './HeroContent'
 import TechStack from './TechStack'
@@ -7,86 +6,12 @@ import ActionButtons from './ActionButtons'
 import SocialLinks from './SocialLinks'
 
 const Intro = () => {
-  // Enhanced animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.2,
-        staggerChildren: 0.15,
-        duration: 0.8
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { y: 60, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.6, -0.05, 0.01, 0.99]
-      }
-    }
-  }
-
-  const imageVariants = {
-    hidden: { scale: 0.5, opacity: 0, rotate: -10 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      rotate: 0,
-      transition: {
-        duration: 1.2,
-        ease: [0.6, -0.05, 0.01, 0.99],
-        delay: 0.3
-      }
-    }
-  }
-
-  const floatingVariants = {
-    animate: {
-      y: [-15, 15, -15],
-      x: [-5, 5, -5],
-      rotate: [0, 5, -5, 0],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  }
-
-  const backgroundVariants = {
-    animate: {
-      background: [
-        "radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)",
-        "radial-gradient(circle at 80% 50%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)",
-        "radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)"
-      ],
-      transition: {
-        duration: 8,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  }
-
   return (
-    <motion.section 
-      className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
+    <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden">
       {/* Dynamic Background */}
-      <motion.div 
-        className="absolute inset-0 z-0"
-        variants={backgroundVariants}
-        animate="animate"
-      />
+      <div className="absolute inset-0 z-0 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900">
+        <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-blue-500/5 via-cyan-500/5 to-blue-500/5"></div>
+      </div>
       
       {/* Grid Background */}
       <div className="absolute inset-0 z-0 opacity-20">
@@ -101,22 +26,14 @@ const Intro = () => {
 
       {/* Floating Particles */}
       {[...Array(6)].map((_, i) => (
-        <motion.div
+        <div
           key={i}
-          className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-20"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -100, 0],
-            opacity: [0.2, 0.8, 0.2],
-          }}
-          transition={{
-            duration: 10 + i * 2,
-            repeat: Infinity,
-            delay: i * 2,
-          }}
+          className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-20 animate-bounce"
           style={{
             left: `${10 + i * 15}%`,
             top: `${20 + i * 10}%`,
+            animationDelay: `${i * 0.5}s`,
+            animationDuration: `${3 + i * 0.5}s`,
           }}
         />
       ))}
@@ -125,31 +42,31 @@ const Intro = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Hero Content */}
           <div className="space-y-8 lg:space-y-10 order-2 lg:order-1">
-            <HeroContent 
-              variants={containerVariants} 
-              itemVariants={itemVariants} 
-            />
-            <TechStack 
-              variants={containerVariants} 
-              itemVariants={itemVariants} 
-            />
-            <ActionButtons 
-              variants={containerVariants} 
-              itemVariants={itemVariants} 
-            />
-            <SocialLinks 
-              variants={containerVariants} 
-              itemVariants={itemVariants} 
-            />
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+              <HeroContent />
+            </div>
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+              <TechStack />
+            </div>
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+              <ActionButtons />
+            </div>
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+              <SocialLinks />
+            </div>
           </div>
           {/* Hero Image */}
-          <HeroImage 
-            variants={imageVariants} 
-            floatingVariants={floatingVariants} 
-          />
+          <div 
+            data-aos="fade-left" 
+            data-aos-duration="1000" 
+            data-aos-delay="500"
+            className="order-1 lg:order-2"
+          >
+            <HeroImage />
+          </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   )
 }
 

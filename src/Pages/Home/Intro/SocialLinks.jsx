@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { FaGithub, FaLinkedin, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa'
 import { SiLeetcode } from 'react-icons/si'
 
-const SocialLinks = ({ variants, itemVariants }) => {
+const SocialLinks = () => {
   const [socialData, setSocialData] = useState([])
 
   // Icon mapping
@@ -37,32 +36,27 @@ const SocialLinks = ({ variants, itemVariants }) => {
   }, [])
 
   return (
-    <motion.div 
-      className="flex flex-wrap gap-3 lg:gap-4 pt-4 justify-center lg:justify-start"
-      variants={itemVariants}
-    >
+    <div className="flex flex-wrap gap-3 lg:gap-4 pt-4 justify-center lg:justify-start">
       {socialData.map((social, index) => {
         const IconComponent = iconMap[social.icon]
         
         return (
-          <motion.a 
+          <a 
             key={social.id}
             href={social.url}
             target="_blank" 
             rel="noopener noreferrer"
-            className={`p-2 lg:p-3 rounded-full bg-slate-800 text-gray-400 hover:text-white ${social.hoverColor} transition-all duration-300`}
+            className={`p-2 lg:p-3 rounded-full bg-slate-800 text-gray-400 hover:text-white ${social.hoverColor} hover:scale-110 hover:rotate-6 active:scale-95 transition-all duration-300`}
             title={social.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 + index * 0.1 }}
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.9 }}
+            data-aos="fade-up"
+            data-aos-delay={100 + index * 50}
+            data-aos-duration="600"
           >
             {IconComponent && <IconComponent className="h-4 w-4 lg:h-5 lg:w-5" />}
-          </motion.a>
+          </a>
         )
       })}
-    </motion.div>
+    </div>
   )
 }
 
