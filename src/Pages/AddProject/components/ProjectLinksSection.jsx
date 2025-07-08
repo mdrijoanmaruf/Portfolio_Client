@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { FaCode, FaLaptop, FaServer, FaExternalLinkAlt } from 'react-icons/fa'
 
 const ProjectLinksSection = ({ formData, handleInputChange }) => {

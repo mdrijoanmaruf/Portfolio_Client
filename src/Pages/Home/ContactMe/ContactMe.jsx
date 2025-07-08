@@ -8,7 +8,7 @@ import ContactCTA from './ContactCTA'
 
 const ContactMe = () => {
   return (
-    <section className="py-16 lg:py-24">
+    <section className="py-6 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-16">
           {/* Section Title */}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
 import { FaArrowLeft, FaGithub, FaExternalLinkAlt, FaStar, FaCalendar, FaLaptop, FaServer, FaCode, FaEye } from 'react-icons/fa'
 import { MdEdit, MdDelete } from 'react-icons/md'
 import { projectsAPI } from '../../utils/api'
 import useAuth from '../../Hooks/useAuth'
+import ComponentLoading from '../../Shared/LoadingAnimation/ComponentLoading'
 
 const ProjectDetails = () => {
   const { id } = useParams()
@@ -71,15 +71,7 @@ const ProjectDetails = () => {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
-        />
-      </div>
-    )
+    return <ComponentLoading message="Loading project details..." />
   }
 
   if (error || !project) {

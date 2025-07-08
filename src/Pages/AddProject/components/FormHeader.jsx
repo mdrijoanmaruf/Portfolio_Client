@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { MdAdminPanelSettings } from 'react-icons/md'
 
 const FormHeader = () => {

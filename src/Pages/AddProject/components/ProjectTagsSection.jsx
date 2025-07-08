@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { FaTags, FaTimes } from 'react-icons/fa'
 
 const ProjectTagsSection = ({ formData, currentTag, setCurrentTag, addTag, removeTag }) => {

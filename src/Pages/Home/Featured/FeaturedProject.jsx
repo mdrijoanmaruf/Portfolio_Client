@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { FaEye, FaExternalLinkAlt, FaStar, FaLaptop, FaServer, FaGithub } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { projectsAPI } from '../../../utils/api'
+import Loading from '../../../Shared/LoadingAnimation/Loading'
 
 const FeaturedProject = () => {
   const [featuredProjects, setFeaturedProjects] = useState([])
@@ -46,19 +46,7 @@ const FeaturedProject = () => {
   }
 
   if (loading) {
-    return (
-      <div className="py-16 sm:py-20 lg:py-24 ">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center py-12">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full"
-            />
-          </div>
-        </div>
-      </div>
-    )
+    return <Loading />
   }
 
   if (error) {
@@ -96,12 +84,10 @@ const FeaturedProject = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+        <div
           className="text-center mb-12 sm:mb-16 lg:mb-20"
+          data-aos="fade-up"
+          data-aos-duration="800"
         >
           <div className="flex items-center justify-center gap-2 mb-4">
             <FaStar className="text-yellow-400 text-xl" />
@@ -113,7 +99,7 @@ const FeaturedProject = () => {
           <p className="text-gray-400 text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed">
             Explore my handpicked collection of projects that showcase innovation, creativity, and technical excellence
           </p>
-        </motion.div>
+        </div>
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
@@ -128,12 +114,11 @@ const FeaturedProject = () => {
         </div>
 
         {/* View All Projects Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+        <div
           className="text-center"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="300"
         >
           <button
             onClick={handleViewAllProjects}
@@ -147,7 +132,7 @@ const FeaturedProject = () => {
             </span>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-cyan-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -155,12 +140,11 @@ const FeaturedProject = () => {
 
 const FeaturedProjectCard = ({ project, index, onViewDetails }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+    <div
       className="group relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-lg border border-slate-700/50 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
+      data-aos="fade-up"
+      data-aos-duration="600"
+      data-aos-delay={index * 100}
     >
       {/* Project Image */}
       <div className="relative h-48 sm:h-56 overflow-hidden">
@@ -279,7 +263,7 @@ const FeaturedProjectCard = ({ project, index, onViewDetails }) => {
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-cyan-500/5" />
       </div>
-    </motion.div>
+    </div>
   )
 }
 

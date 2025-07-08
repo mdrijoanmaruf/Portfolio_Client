@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { FaEye, FaEdit, FaTrash, FaGithub, FaExternalLinkAlt, FaStar, FaFilter, FaSearch, FaCode, FaLaptop, FaServer } from 'react-icons/fa'
 import { MdGridView, MdViewList } from 'react-icons/md'
 import { projectsAPI } from '../../utils/api'
 import useAuth from '../../Hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { deleteProject, showSuccess, showError, handleFeatureToggle } from '../../utils/sweetAlerts'
+import ComponentLoading from '../../Shared/LoadingAnimation/ComponentLoading'
 
 const ProjectsList = () => {
   const [projects, setProjects] = useState([])
@@ -146,15 +146,7 @@ const ProjectsList = () => {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
-        />
-      </div>
-    )
+    return <ComponentLoading message="Loading projects..." />
   }
 
   if (error) {
@@ -177,25 +169,25 @@ const ProjectsList = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-6 sm:py-8 lg:py-12 xl:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+        <div 
           className="text-center mb-6 sm:mb-8 lg:mb-12"
+          data-aos="fade-up"
+          data-aos-duration="800"
         >
-          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 sm:mb-4 px-2">
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl  font-bold text-white mb-3 sm:mb-4 px-2">
             Portfolio <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Projects</span>
           </h1>
           <p className="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto px-4">
             Explore my collection of projects, built with modern technologies and best practices.
           </p>
-        </motion.div>
+        </div>
 
         {/* Filters and Controls */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+        <div
           className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 lg:mb-8"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="100"
         >
           <div className="flex flex-col space-y-3 sm:space-y-4 lg:space-y-0 lg:flex-row lg:gap-4 lg:items-center lg:justify-between">
             {/* Search */}
@@ -273,30 +265,30 @@ const ProjectsList = () => {
           <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-gray-400">
             Showing {filteredProjects.length} of {projects.length} projects
           </div>
-        </motion.div>
+        </div>
 
         {/* Projects Grid/List */}
-        <AnimatePresence mode="wait">
+        <div>
           {filteredProjects.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               className="text-center py-12 sm:py-16 lg:py-20"
+              data-aos="fade-up"
+              data-aos-duration="800"
+              data-aos-delay="200"
             >
               <div className="text-gray-400 text-xl sm:text-2xl lg:text-3xl mb-4 font-semibold">No projects found</div>
               <p className="text-gray-500 text-base sm:text-lg px-4 max-w-md mx-auto">Try adjusting your search or filter criteria to find what you're looking for</p>
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               className={
                 viewMode === 'grid'
                   ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'
                   : 'space-y-6'
               }
+              data-aos="fade-up"
+              data-aos-duration="800"
+              data-aos-delay="200"
             >
               {filteredProjects.map((project, index) => (
                 <ProjectCard
@@ -311,9 +303,9 @@ const ProjectsList = () => {
                   onFeatureToggle={handleFeatureToggleClick}
                 />
               ))}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
       </div>
     </div>
   )
@@ -321,13 +313,13 @@ const ProjectsList = () => {
 
 const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit, onDelete, onFeatureToggle }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <div
       className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-lg border border-slate-700/50 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 group ${
         viewMode === 'list' ? 'flex flex-col lg:flex-row h-auto lg:h-80' : 'flex flex-col h-full'
       }`}
+      data-aos="fade-up"
+      data-aos-duration="600"
+      data-aos-delay={index * 100}
     >
       {/* Project Image */}
       <div className={`relative ${
@@ -346,15 +338,15 @@ const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit,
         
         {/* Featured Badge */}
         {project.isFeatured && (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3 }}
+          <div
             className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-lg"
+            data-aos="zoom-in"
+            data-aos-duration="400"
+            data-aos-delay="300"
           >
             <FaStar className="text-xs" />
             Featured
-          </motion.div>
+          </div>
         )}
 
         {/* Admin Controls Overlay */}
@@ -497,7 +489,7 @@ const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit,
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-cyan-500/5" />
       </div>
-    </motion.div>
+    </div>
   )
 }
 

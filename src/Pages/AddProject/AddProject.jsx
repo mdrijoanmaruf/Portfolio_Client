@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { FaPlus, FaEdit } from 'react-icons/fa'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { projectsAPI } from '../../utils/api'
@@ -282,11 +281,7 @@ const AddProject = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-8 sm:py-12 lg:py-16 xl:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8 sm:mb-12"
-        >
+        <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
             {isEditMode ? (
               <>
@@ -304,24 +299,24 @@ const AddProject = () => {
               : 'Showcase your amazing work and add it to your portfolio collection'
             }
           </p>
-        </motion.div>
+        </div>
 
         {/* Loading State */}
         {isLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center justify-center py-12"
-          >
-            <div className="flex items-center gap-3 text-blue-400">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full"
-              />
-              Loading project data...
+          <div className="flex items-center justify-center py-12">
+            <div className="flex items-center gap-4 text-blue-400">
+              <div className="relative">
+                <div className="w-8 h-8 border-2 border-transparent border-t-blue-500 border-r-cyan-400 rounded-full animate-spin"></div>
+                <div className="absolute inset-1 w-6 h-6 border-2 border-transparent border-b-purple-500 border-l-pink-400 rounded-full animate-spin-reverse"></div>
+              </div>
+              <span className="text-lg font-medium">
+                Loading project data
+                <span className="inline-block animate-bounce ml-1">.</span>
+                <span className="inline-block animate-bounce ml-1" style={{ animationDelay: '0.2s' }}>.</span>
+                <span className="inline-block animate-bounce ml-1" style={{ animationDelay: '0.4s' }}>.</span>
+              </span>
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Submit Status */}
@@ -332,10 +327,7 @@ const AddProject = () => {
 
         {/* Form */}
         {!isLoading && (
-          <motion.form
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <form
             onSubmit={handleSubmit}
             className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 lg:space-y-10 mx-4 sm:mx-0"
           >
@@ -369,11 +361,9 @@ const AddProject = () => {
 
             {/* Submit Button */}
             <div className="flex justify-center pt-6 sm:pt-8 border-t border-slate-600">
-              <motion.button
+              <button
                 type="submit"
                 disabled={isSubmitting}
-                whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
-                whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
                 className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 text-white rounded-xl font-bold text-base sm:text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
               >
                 {isEditMode ? <FaEdit className="text-lg sm:text-xl" /> : <FaPlus className="text-lg sm:text-xl" />}
@@ -383,9 +373,9 @@ const AddProject = () => {
                     : (isEditMode ? 'Update Project' : 'Add Project to Portfolio')
                   }
                 </span>
-              </motion.button>
+              </button>
             </div>
-          </motion.form>
+          </form>
         )}
       </div>
     </div>

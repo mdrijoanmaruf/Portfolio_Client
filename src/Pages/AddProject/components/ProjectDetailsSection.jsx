@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { FaImage, FaStar } from 'react-icons/fa'
 import { MdDescription, MdTitle } from 'react-icons/md'
 
