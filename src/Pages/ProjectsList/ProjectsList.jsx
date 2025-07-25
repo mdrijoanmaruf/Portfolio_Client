@@ -272,9 +272,6 @@ const ProjectsList = () => {
           {filteredProjects.length === 0 ? (
             <div
               className="text-center py-12 sm:py-16 lg:py-20"
-              data-aos="fade-up"
-              data-aos-duration="800"
-              data-aos-delay="200"
             >
               <div className="text-gray-400 text-xl sm:text-2xl lg:text-3xl mb-4 font-semibold">No projects found</div>
               <p className="text-gray-500 text-base sm:text-lg px-4 max-w-md mx-auto">Try adjusting your search or filter criteria to find what you're looking for</p>
@@ -286,9 +283,7 @@ const ProjectsList = () => {
                   ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'
                   : 'space-y-6'
               }
-              data-aos="fade-up"
-              data-aos-duration="800"
-              data-aos-delay="200"
+              
             >
               {filteredProjects.map((project, index) => (
                 <ProjectCard
@@ -317,9 +312,6 @@ const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit,
       className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-lg border border-slate-700/50 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 group ${
         viewMode === 'list' ? 'flex flex-col lg:flex-row h-auto lg:h-80' : 'flex flex-col h-full'
       }`}
-      data-aos="fade-up"
-      data-aos-duration="600"
-      data-aos-delay={index * 100}
     >
       {/* Project Image */}
       <div className={`relative ${

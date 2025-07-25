@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaHeart } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaFacebook, FaInstagram, FaCode, FaEnvelope, FaHeart } from 'react-icons/fa';
 import { HiLocationMarker, HiPhone } from 'react-icons/hi';
 
 const Footer = () => {
@@ -21,32 +21,54 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="https://github.com" 
+                href="https://github.com/mdrijoanmaruf" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                title="GitHub"
               >
                 <FaGithub className="h-6 w-6" />
               </a>
               <a 
-                href="https://linkedin.com" 
+                href="https://www.linkedin.com/in/mdrijoanmaruf/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                title="LinkedIn"
               >
                 <FaLinkedin className="h-6 w-6" />
               </a>
               <a 
-                href="https://twitter.com" 
+                href="https://www.facebook.com/md.rijoanmaruf" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                title="Facebook"
               >
-                <FaTwitter className="h-6 w-6" />
+                <FaFacebook className="h-6 w-6" />
+              </a>
+              <a 
+                href="https://www.instagram.com/rijoanmaruf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                title="Instagram"
+              >
+                <FaInstagram className="h-6 w-6" />
+              </a>
+              <a 
+                href="https://leetcode.com/u/mdrijoanmaruf/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                title="LeetCode"
+              >
+                <FaCode className="h-6 w-6" />
               </a>
               <a 
                 href="mailto:rijoanmaruf@gmail.com"
                 className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                title="Email"
               >
                 <FaEnvelope className="h-6 w-6" />
               </a>

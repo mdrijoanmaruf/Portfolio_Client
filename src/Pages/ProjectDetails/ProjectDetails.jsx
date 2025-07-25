@@ -106,24 +106,20 @@ const ProjectDetails = () => {
             
             {isAdmin && (
               <div className="flex gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
                   onClick={handleEdit}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hover:scale-105 active:scale-95"
                 >
                   <MdEdit />
                   Edit Project
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                </button>
+                <button
                   onClick={handleDelete}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors hover:scale-105 active:scale-95"
                 >
                   <MdDelete />
                   Delete
-                </motion.button>
+                </button>
               </div>
             )}
           </div>
@@ -132,11 +128,7 @@ const ProjectDetails = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-12"
-        >
+        <div className="mb-12">
           <div className="flex items-start justify-between mb-6">
             <div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
@@ -167,60 +159,49 @@ const ProjectDetails = () => {
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-4 mb-8">
             {project.liveLink && (
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <a
                 href={project.liveLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
               >
                 <FaExternalLinkAlt />
                 View Live Demo
-              </motion.a>
+              </a>
             )}
             
             {project.clientSourceCode && (
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <a
                 href={project.clientSourceCode}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
               >
                 <FaLaptop />
                 Client Code
-              </motion.a>
+              </a>
             )}
             
             {project.serverSourceCode && (
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <a
                 href={project.serverSourceCode}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
               >
                 <FaServer />
                 Server Code
-              </motion.a>
+              </a>
             )}
           </div>
-        </motion.div>
+        </div>
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Image and Description */}
           <div className="lg:col-span-2 space-y-8">
             {/* Project Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="relative rounded-2xl overflow-hidden shadow-2xl"
-            >
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img
                 src={project.image}
                 alt={project.title}
@@ -234,15 +215,10 @@ const ProjectDetails = () => {
                   <FaEye className="text-4xl text-gray-600" />
                 </div>
               )}
-            </motion.div>
+            </div>
 
             {/* Description */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8"
-            >
+            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8">
               <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
                   <FaCode className="text-white text-sm" />
@@ -254,41 +230,28 @@ const ProjectDetails = () => {
                   {project.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Right Column - Project Info */}
           <div className="space-y-6">
             {/* Technologies */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6"
-            >
+            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">Technologies Used</h3>
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag, index) => (
-                  <motion.span
+                  <span
                     key={index}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5 + index * 0.1 }}
                     className="px-3 py-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 rounded-full text-sm font-medium"
                   >
                     {tag}
-                  </motion.span>
+                  </span>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
             {/* Project Stats */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6"
-            >
+            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">Project Info</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -326,15 +289,10 @@ const ProjectDetails = () => {
                   }`}></span>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Related Actions */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6"
-            >
+            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">Quick Actions</h3>
               <div className="space-y-3">
                 <button
@@ -365,7 +323,7 @@ const ProjectDetails = () => {
                   </>
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
