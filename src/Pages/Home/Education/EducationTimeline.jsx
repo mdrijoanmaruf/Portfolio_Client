@@ -27,7 +27,7 @@ const EducationTimeline = () => {
       {education.map((edu, index) => (
         <div
           key={edu.id}
-          className="relative hover:scale-[1.02] transition-transform duration-300"
+          className="relative  transition-transform duration-300"
         >
           {/* Timeline Line */}
           <div className="absolute left-6 sm:left-8 top-16 sm:top-20 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-cyan-500 opacity-50 hidden sm:block"></div>

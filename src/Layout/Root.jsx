@@ -15,9 +15,10 @@ const Root = () => {
     })
   }, [])
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+    <div className="min-h-screen bg-[linear-gradient(to_bottom_right,#000000,#111111,#0a0a0a)] bg-fixed">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(50,50,50,0.1),transparent_80%)] pointer-events-none"></div>
         <Navbar />
-        <main className="min-h-[calc(100vh-128px)]">
+        <main className="min-h-[calc(100vh-128px)] relative z-10">
           <Outlet />
         </main>
         <Footer />

@@ -2,7 +2,7 @@ import React from 'react'
 
 const ComponentLoading = ({ message = "Loading...", className = "" }) => {
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center ${className}`}>
+    <div className={`min-h-screen flex items-center justify-center ${className}`}>
       <div className="relative">
         {/* Background glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-cyan-600/10 rounded-full blur-2xl animate-pulse"></div>

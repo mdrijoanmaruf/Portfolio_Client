@@ -9,13 +9,13 @@ const Intro = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden">
       {/* Dynamic Background */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900">
+      <div className="absolute inset-0 z-0 ">
         <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-blue-500/5 via-cyan-500/5 to-blue-500/5"></div>
       </div>
       
       {/* Grid Background */}
       <div className="absolute inset-0 z-0 opacity-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900" />
+        <div className="absolute inset-0 " />
         <div 
           className="absolute inset-0 bg-grid-pattern opacity-10"
           style={{

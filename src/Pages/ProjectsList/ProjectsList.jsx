@@ -151,7 +151,7 @@ const ProjectsList = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-400 text-xl mb-4">{error}</div>
           <button
@@ -166,7 +166,7 @@ const ProjectsList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-6 sm:py-8 lg:py-12 xl:py-16">
+    <div className="min-h-screen py-6 sm:py-8 lg:py-12 xl:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div 
