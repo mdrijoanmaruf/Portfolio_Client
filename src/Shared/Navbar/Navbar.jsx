@@ -163,7 +163,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 bg-gradient-to-r from-slate-800 via-blue-800 to-slate-800 border-t border-slate-700">
+        <div className="px-2 pt-2 pb-3 space-y-1 border border-t border-slate-700">
           {navItems.map((item) => (
             item.protected ? (
               hasAccess ? (

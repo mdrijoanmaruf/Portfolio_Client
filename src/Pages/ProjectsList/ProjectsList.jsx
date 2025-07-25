@@ -13,7 +13,6 @@ const ProjectsList = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
-  const [filterTag, setFilterTag] = useState('')
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false)
   
@@ -27,7 +26,7 @@ const ProjectsList = () => {
 
   useEffect(() => {
     filterProjects()
-  }, [projects, searchTerm, filterTag, showFeaturedOnly])
+  }, [projects, searchTerm, showFeaturedOnly])
 
   const fetchProjects = async () => {
     try {
@@ -67,24 +66,12 @@ const ProjectsList = () => {
       )
     }
     
-    // Tag filter
-    if (filterTag) {
-      filtered = filtered.filter(project =>
-        project.tags.includes(filterTag)
-      )
-    }
-    
     // Featured filter
     if (showFeaturedOnly) {
       filtered = filtered.filter(project => project.isFeatured)
     }
     
     setFilteredProjects(filtered)
-  }
-
-  const getAllTags = () => {
-    const allTags = projects.flatMap(project => project.tags)
-    return [...new Set(allTags)].sort()
   }
 
   const handleViewDetails = (projectId) => {
@@ -202,61 +189,46 @@ const ProjectsList = () => {
               />
             </div>
 
-            {/* Filters Row */}
-            <div className="flex flex-col xs:flex-row gap-3 lg:items-center">
-              {/* Tag Filter */}
-              <select
-                value={filterTag}
-                onChange={(e) => setFilterTag(e.target.value)}
-                className="flex-1 xs:flex-none xs:min-w-[120px] px-3 sm:px-4 py-2.5 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base transition-all"
+            {/* Featured Filter & View Mode Container */}
+            <div className="flex gap-3">
+              {/* Featured Filter */}
+              <button
+                onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
+                className={`flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 py-2.5 rounded-lg transition-all text-sm font-medium whitespace-nowrap min-h-[44px] ${
+                  showFeaturedOnly
+                    ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 hover:bg-yellow-500/30'
+                    : 'bg-slate-700/50 text-gray-400 border border-slate-600 hover:text-white hover:bg-slate-600/50'
+                }`}
               >
-                <option value="">All Tags</option>
-                {getAllTags().map(tag => (
-                  <option key={tag} value={tag}>{tag}</option>
-                ))}
-              </select>
+                <FaStar className="text-xs sm:text-sm" />
+                <span className="hidden xs:inline">Featured</span>
+                <span className="xs:hidden">⭐</span>
+              </button>
 
-              {/* Featured Filter & View Mode Container */}
-              <div className="flex gap-2 xs:gap-3">
-                {/* Featured Filter */}
+              {/* View Mode Toggle */}
+              <div className="flex bg-slate-700/50 rounded-lg border border-slate-600">
                 <button
-                  onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
-                  className={`flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 py-2.5 rounded-lg transition-all text-sm font-medium whitespace-nowrap min-h-[44px] ${
-                    showFeaturedOnly
-                      ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 hover:bg-yellow-500/30'
-                      : 'bg-slate-700/50 text-gray-400 border border-slate-600 hover:text-white hover:bg-slate-600/50'
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2.5 xs:p-3 rounded-l-lg transition-all min-h-[44px] min-w-[44px] ${
+                    viewMode === 'grid'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-400 hover:text-white hover:bg-slate-600/50'
                   }`}
+                  title="Grid View"
                 >
-                  <FaStar className="text-xs sm:text-sm" />
-                  <span className="hidden xs:inline">Featured</span>
-                  <span className="xs:hidden">⭐</span>
+                  <MdGridView className="text-sm sm:text-base" />
                 </button>
-
-                {/* View Mode Toggle */}
-                <div className="flex bg-slate-700/50 rounded-lg border border-slate-600">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2.5 xs:p-3 rounded-l-lg transition-all min-h-[44px] min-w-[44px] ${
-                      viewMode === 'grid'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-slate-600/50'
-                    }`}
-                    title="Grid View"
-                  >
-                    <MdGridView className="text-sm sm:text-base" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2.5 xs:p-3 rounded-r-lg transition-all min-h-[44px] min-w-[44px] ${
-                      viewMode === 'list'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-slate-600/50'
-                    }`}
-                    title="List View"
-                  >
-                    <MdViewList className="text-sm sm:text-base" />
-                  </button>
-                </div>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2.5 xs:p-3 rounded-r-lg transition-all min-h-[44px] min-w-[44px] ${
+                    viewMode === 'list'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-400 hover:text-white hover:bg-slate-600/50'
+                  }`}
+                  title="List View"
+                >
+                  <MdViewList className="text-sm sm:text-base" />
+                </button>
               </div>
             </div>
           </div>
