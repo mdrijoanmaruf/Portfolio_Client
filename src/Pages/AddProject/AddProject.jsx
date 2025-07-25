@@ -38,6 +38,9 @@ const AddProject = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  // New states for image upload
+  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Redirect non-admin users
   useEffect(() => {
@@ -67,6 +70,10 @@ const AddProject = () => {
               isFeatured: project.isFeatured || false,
               tags: project.tags || []
             })
+            // Set image preview for existing project
+            if (project.image) {
+              setImagePreview(project.image);
+            }
           } else {
             setSubmitStatus('error')
             console.error('Failed to load project:', response.message)
@@ -126,6 +133,118 @@ const AddProject = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  // Handle image upload with ImgBB
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    
+    if (!file) return;
+    
+    // Only allow image files
+    if (!file.type.match(/image\/(jpeg|jpg|png|gif|webp)/)) {
+      Swal.fire({
+        title: 'Invalid File Type',
+        text: 'Please select a valid image file (JPEG, PNG, GIF, or WEBP)',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+        background: '#1e293b',
+        color: '#ffffff',
+        customClass: {
+          popup: 'border border-slate-600'
+        }
+      });
+      return;
+    }
+    
+    // File size validation (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      Swal.fire({
+        title: 'File Too Large',
+        text: 'Please select an image less than 2MB',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+        background: '#1e293b',
+        color: '#ffffff',
+        customClass: {
+          popup: 'border border-slate-600'
+        }
+      });
+      return;
+    }
+    
+    // Show local preview before upload
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+    
+    setIsUploading(true);
+    
+    try {
+      // Create FormData and append the file
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      // Get API key from environment variables
+      const apiKey = import.meta.env.VITE_IMGBB_API;
+      
+      if (!apiKey) {
+        throw new Error('ImgBB API key not found');
+      }
+      
+      // Upload to ImgBB
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Update form data with the uploaded image URL
+        setFormData(prev => ({
+          ...prev,
+          image: result.data.url
+        }));
+        
+        Swal.fire({
+          title: 'Image Uploaded',
+          text: 'Your image has been uploaded successfully!',
+          icon: 'success',
+          confirmButtonColor: '#10b981',
+          timer: 2000,
+          timerProgressBar: true,
+          background: '#1e293b',
+          color: '#ffffff',
+          customClass: {
+            popup: 'border border-slate-600'
+          }
+        });
+      } else {
+        throw new Error(result.error?.message || 'Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      
+      Swal.fire({
+        title: 'Upload Failed',
+        text: error.message || 'Failed to upload image. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+        background: '#1e293b',
+        color: '#ffffff',
+        customClass: {
+          popup: 'border border-slate-600'
+        }
+      });
+      
+      // Reset preview on error
+      setImagePreview(null);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const addTag = () => {
@@ -234,6 +353,7 @@ const AddProject = () => {
             isFeatured: false,
             tags: []
           });
+          setImagePreview(null);
         }
         
         // Redirect to projects list
@@ -366,7 +486,10 @@ const AddProject = () => {
                 <div className="space-y-6 sm:space-y-8">
                   <ProjectDetailsSection 
                     formData={formData} 
-                    handleInputChange={handleInputChange} 
+                    handleInputChange={handleInputChange}
+                    handleImageUpload={handleImageUpload}
+                    isUploading={isUploading}
+                    imagePreview={imagePreview}
                   />
                 </div>
 

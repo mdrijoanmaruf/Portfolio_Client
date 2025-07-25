@@ -1,8 +1,9 @@
 import React from 'react'
-import { FaImage, FaStar } from 'react-icons/fa'
+import { FaImage, FaStar, FaUpload } from 'react-icons/fa'
 import { MdDescription, MdTitle } from 'react-icons/md'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
-const ProjectDetailsSection = ({ formData, handleInputChange }) => {
+const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload, isUploading, imagePreview }) => {
   return (
     <div 
       data-aos="fade-right"
@@ -67,26 +68,75 @@ const ProjectDetailsSection = ({ formData, handleInputChange }) => {
           />
         </div>
 
-        {/* Image URL */}
+        {/* Project Image Upload with ImgBB */}
         <div 
-          className="space-y-2"
+          className="space-y-3"
           data-aos="fade-up"
           data-aos-duration="600"
           data-aos-delay="500"
         >
           <label className="flex items-center gap-2 text-sm font-semibold text-white">
             <FaImage className="text-blue-400" />
-            Project Image URL *
+            Project Image *
           </label>
-          <input
-            type="url"
-            name="image"
-            value={formData.image}
-            onChange={handleInputChange}
-            required
-            placeholder="https://example.com/project-screenshot.jpg"
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm sm:text-base"
-          />
+
+          {/* Image upload section */}
+          <div className="flex flex-col gap-4">
+            {/* File input section */}
+            <div className="relative">
+              <input
+                type="file"
+                id="imageUpload"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                disabled={isUploading}
+              />
+              <label 
+                htmlFor="imageUpload" 
+                className={`flex items-center justify-center gap-2 w-full py-3 px-4 cursor-pointer rounded-lg border border-dashed border-blue-400 transition-all
+                  ${isUploading 
+                    ? 'bg-slate-700/30 cursor-not-allowed' 
+                    : 'bg-slate-700/50 hover:bg-slate-700/70'}`}
+              >
+                {isUploading ? (
+                  <AiOutlineLoading3Quarters className="text-blue-400 animate-spin mr-2" />
+                ) : (
+                  <FaUpload className="text-blue-400 mr-2" />
+                )}
+                <span className="text-white text-sm">
+                  {isUploading 
+                    ? 'Uploading image...' 
+                    : formData.image 
+                      ? 'Change project image' 
+                      : 'Upload project image'
+                  }
+                </span>
+              </label>
+            </div>
+
+            {/* Image preview section */}
+            {(imagePreview || formData.image) && !isUploading && (
+              <div className="mt-2 relative">
+                <div className="bg-slate-700/50 p-2 rounded-lg border border-slate-600">
+                  <img 
+                    src={imagePreview || formData.image} 
+                    alt="Project preview" 
+                    className="w-full h-auto max-h-64 object-contain rounded-lg"
+                  />
+                  {/* Hidden image URL for form submission */}
+                  <input
+                    type="hidden"
+                    name="image"
+                    value={formData.image}
+                  />
+                  <p className="text-xs text-gray-400 mt-2 break-all">
+                    {formData.image && formData.image.substring(0, 50) + (formData.image.length > 50 ? '...' : '')}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Featured Toggle */}

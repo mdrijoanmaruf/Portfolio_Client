@@ -11,11 +11,11 @@ const HeroImage = () => {
         
         {/* Main image container */}
         <div className="relative z-10 group">
-          <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-gradient-to-r from-blue-400 to-cyan-300 shadow-2xl hover:scale-105 transition-all duration-500">
+          <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-gradient-to-r from-blue-400 to-cyan-300 shadow-2xl  transition-all duration-500">
             <img 
               src={RijoanImg} 
               alt="Md Rijoan Maruf" 
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              className="w-full h-full object-cover  transition-transform duration-300"
             />
           </div>
           
