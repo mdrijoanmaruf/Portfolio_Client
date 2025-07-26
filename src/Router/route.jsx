@@ -11,6 +11,7 @@ import ProjectDetails from "../Pages/ProjectDetails/ProjectDetails";
 import Admin from "../Pages/Admin/Admin";
 import Users from "../Pages/AdminDashboard/Users/Users";
 import PrivateRoute from "./PrivateRoute";
+import PageNotFound from "../Pages/PageNotFound/PageNotFound";
 
 export const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
             {
                 path: '/projects/:id',
                 Component: ProjectDetails
+            },
+            {
+                path: "*",
+                Component: PageNotFound
             }
         ]
     },
