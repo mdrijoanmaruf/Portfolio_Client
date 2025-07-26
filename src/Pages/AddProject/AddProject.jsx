@@ -13,6 +13,7 @@ import {
 } from './components'
 
 const AddProject = () => {
+  console.log("AddProject component rendering")
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -20,7 +21,7 @@ const AddProject = () => {
   const editId = searchParams.get('edit')
   const isEditMode = Boolean(editId)
   
-  // Check if user is admin
+  // Check if user is admin - removing potential null reference
   const isAdmin = user?.email === 'rijoanmaruf@gmail.com'
   
   const [formData, setFormData] = useState({
@@ -398,20 +399,11 @@ const AddProject = () => {
   };
 
   return (
-    <div className="min-h-screen py-8 sm:py-12 lg:py-16 xl:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8">
+      <div className="max-w-7xl mx-au ">
         {/* Header */}
-        <div 
-          className="text-center mb-8 sm:mb-12"
-          data-aos="fade-up"
-          data-aos-duration="800"
-        >
-          <h1 
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4"
-            data-aos="fade-up"
-            data-aos-duration="800"
-            data-aos-delay="100"
-          >
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             {isEditMode ? (
               <>
                 <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">Edit</span> Project
@@ -422,12 +414,7 @@ const AddProject = () => {
               </>
             )}
           </h1>
-          <p 
-            className="text-gray-400 text-lg max-w-2xl mx-auto"
-            data-aos="fade-up"
-            data-aos-duration="800"
-            data-aos-delay="200"
-          >
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             {isEditMode 
               ? 'Update your project details and showcase your latest work'
               : 'Showcase your amazing work and add it to your portfolio collection'
@@ -437,11 +424,7 @@ const AddProject = () => {
 
         {/* Loading State */}
         {isLoading && (
-          <div 
-            className="flex items-center justify-center py-12"
-            data-aos="fade-in"
-            data-aos-duration="400"
-          >
+          <div className="flex items-center justify-center py-12">
             <div className="flex items-center gap-4 text-blue-400">
               <div className="relative">
                 <div className="w-8 h-8 border-2 border-transparent border-t-blue-500 border-r-cyan-400 rounded-full animate-spin"></div>
@@ -458,10 +441,7 @@ const AddProject = () => {
         )}
 
         {/* Submit Status */}
-        <div
-          data-aos="fade-down"
-          data-aos-duration="600"
-        >
+        <div>
           <SubmitStatus 
             submitStatus={submitStatus} 
             isEditMode={isEditMode}
@@ -470,11 +450,7 @@ const AddProject = () => {
 
         {/* Form */}
         {!isLoading && (
-          <div
-            data-aos="fade-up"
-            data-aos-duration="800"
-            data-aos-delay="300"
-          >
+          <div>
             <form
               onSubmit={handleSubmit}
               className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 lg:space-y-10 mx-4 sm:mx-0"
@@ -511,12 +487,7 @@ const AddProject = () => {
               </div>
 
               {/* Submit Button */}
-              <div 
-                className="flex justify-center pt-6 sm:pt-8 border-t border-slate-600"
-                data-aos="fade-up"
-                data-aos-duration="800"
-                data-aos-delay="400"
-              >
+              <div className="flex justify-center pt-6 sm:pt-8 border-t border-slate-600">
                 <button
                   type="submit"
                   disabled={isSubmitting}

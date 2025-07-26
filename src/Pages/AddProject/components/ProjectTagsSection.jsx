@@ -3,18 +3,8 @@ import { FaTags, FaTimes } from 'react-icons/fa'
 
 const ProjectTagsSection = ({ formData, currentTag, setCurrentTag, addTag, removeTag }) => {
   return (
-    <div 
-      data-aos="fade-up"
-      data-aos-duration="800"
-      data-aos-delay="300"
-      className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 rounded-xl p-4 sm:p-6"
-    >
-      <h3 
-        className="text-lg sm:text-xl font-semibold text-white flex items-center gap-3 mb-4 sm:mb-6"
-        data-aos="fade-up"
-        data-aos-duration="600"
-        data-aos-delay="400"
-      >
+    <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 rounded-xl p-4 sm:p-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-white flex items-center gap-3 mb-4 sm:mb-6">
         <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
           <FaTags className="text-white text-xs sm:text-sm" />
         </div>
@@ -22,12 +12,7 @@ const ProjectTagsSection = ({ formData, currentTag, setCurrentTag, addTag, remov
       </h3>
 
       <div className="space-y-4">
-        <div 
-          className="flex flex-col sm:flex-row gap-2"
-          data-aos="fade-up"
-          data-aos-duration="600"
-          data-aos-delay="500"
-        >
+        <div className="flex flex-col sm:flex-row gap-2">
           <input
             type="text"
             value={currentTag}
@@ -46,20 +31,12 @@ const ProjectTagsSection = ({ formData, currentTag, setCurrentTag, addTag, remov
         </div>
 
         {formData.tags.length > 0 && (
-          <div 
-            className="space-y-3"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="600"
-          >
+          <div className="space-y-3">
             <p className="text-sm text-gray-400 font-medium">Project Tags:</p>
             <div className="flex flex-wrap gap-2">
               {formData.tags.map((tag, index) => (
                 <span
                   key={index}
-                  data-aos="zoom-in"
-                  data-aos-duration="400"
-                  data-aos-delay={100 + (index * 50)}
                   className="px-2 sm:px-3 py-1 sm:py-1.5 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 text-emerald-300 rounded-full text-xs sm:text-sm flex items-center gap-2 font-medium"
                 >
                   {tag}

@@ -3,18 +3,8 @@ import { FaCode, FaLaptop, FaServer, FaExternalLinkAlt } from 'react-icons/fa'
 
 const ProjectLinksSection = ({ formData, handleInputChange }) => {
   return (
-    <div 
-      data-aos="fade-left"
-      data-aos-duration="800"
-      data-aos-delay="200"
-      className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-4 sm:p-6"
-    >
-      <h3 
-        className="text-lg sm:text-xl font-semibold text-white flex items-center gap-3 mb-4 sm:mb-6"
-        data-aos="fade-up"
-        data-aos-duration="600"
-        data-aos-delay="300"
-      >
+    <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-4 sm:p-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-white flex items-center gap-3 mb-4 sm:mb-6">
         <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
           <FaCode className="text-white text-xs sm:text-sm" />
         </div>
@@ -24,12 +14,7 @@ const ProjectLinksSection = ({ formData, handleInputChange }) => {
       <div className="space-y-4 sm:space-y-6">
         {/* Source Code Links */}
         <div className="space-y-4">
-          <div 
-            className="space-y-2"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="400"
-          >
+          <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm font-semibold text-white">
               <FaLaptop className="text-purple-400" />
               Client Repository
@@ -44,12 +29,7 @@ const ProjectLinksSection = ({ formData, handleInputChange }) => {
             />
           </div>
 
-          <div 
-            className="space-y-2"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="500"
-          >
+          <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm font-semibold text-white">
               <FaServer className="text-purple-400" />
               Server Repository
@@ -66,12 +46,7 @@ const ProjectLinksSection = ({ formData, handleInputChange }) => {
         </div>
 
         {/* Live Link */}
-        <div 
-          className="space-y-2"
-          data-aos="fade-up"
-          data-aos-duration="600"
-          data-aos-delay="600"
-        >
+        <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-semibold text-white">
             <FaExternalLinkAlt className="text-purple-400" />
             Live Demo

@@ -31,7 +31,9 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/add-project',
-                Component: AddProject
+                element: <PrivateRoute>
+                    <AddProject />
+                </PrivateRoute>
             },
             {
                 path: '/contact',
@@ -49,11 +51,9 @@ export const router = createBrowserRouter([
     },
     {
         path: '/dashboard',
-        element: (
-            <PrivateRoute>
-                <DashboardLayout />
-            </PrivateRoute>
-        ),
+        element: <PrivateRoute>
+            <DashboardLayout/>
+        </PrivateRoute>,
         children: [
             {
                 index: true,
@@ -65,11 +65,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'add-project',
-                element: (
-                    <PrivateRoute>
-                        <AddProject />
-                    </PrivateRoute>
-                )
+                Component: AddProject
             },
             {
                 path: 'visitors',

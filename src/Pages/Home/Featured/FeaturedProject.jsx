@@ -18,23 +18,18 @@ const FeaturedProject = () => {
   const fetchFeaturedProjects = async () => {
     try {
       setLoading(true)
-      console.log('Fetching featured projects...')
       const response = await projectsAPI.getFeatured()
-      console.log('API Response:', response)
       if (response.success) {
         setFeaturedProjects(response.data)
         setError(null)
-        console.log('Featured projects set:', response.data)
       } else {
         setError('Failed to fetch featured projects')
-        console.log('API returned success: false')
       }
     } catch (err) {
       setError(`Error fetching featured projects: ${err.message}`)
       console.error('Error:', err)
     } finally {
       setLoading(false)
-      console.log('Loading set to false')
     }
   }
 

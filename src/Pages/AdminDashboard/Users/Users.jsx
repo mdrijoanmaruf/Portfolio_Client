@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FaUsers, FaClock, FaCalendarAlt, FaGlobe, FaMobileAlt, FaDesktop, FaChrome, FaFirefox, FaSafari, FaEdge, FaSearch, FaFilter, FaSortAmountDown, FaExclamationTriangle, FaSync } from 'react-icons/fa'
+import { FaUsers, FaClock, FaCalendarAlt, FaGlobe, FaMobileAlt, FaDesktop, FaChrome, FaFirefox, FaSafari, FaEdge, FaSearch, FaFilter, FaSortAmountDown, FaExclamationTriangle, FaSync, FaMapMarkerAlt, FaFlag } from 'react-icons/fa'
 import { visitorsAPI } from '../../../utils/api'
 import useAuth from '../../../Hooks/useAuth'
 
@@ -60,6 +60,18 @@ const Users = () => {
     return date.toLocaleString()
   }
 
+  // Format location
+  const formatLocation = (location) => {
+    if (!location) return '-'
+    
+    const parts = []
+    if (location.city && location.city !== '') parts.push(location.city)
+    if (location.region && location.region !== '') parts.push(location.region)
+    if (location.country && location.country !== '') parts.push(location.country)
+    
+    return parts.length > 0 ? parts.join(', ') : '-'
+  }
+
   // Filter visitors based on search term and date filter
   const filteredVisitors = visitors.filter(visitor => {
     // Search filter
@@ -67,7 +79,9 @@ const Users = () => {
       (visitor.ip && visitor.ip.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (visitor.browser && visitor.browser.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (visitor.device && visitor.device.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (visitor.os && visitor.os.toLowerCase().includes(searchTerm.toLowerCase()))
+      (visitor.os && visitor.os.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (visitor.location && visitor.location.country && visitor.location.country.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (visitor.location && visitor.location.city && visitor.location.city.toLowerCase().includes(searchTerm.toLowerCase()))
     
     // Date filter
     let matchesDate = true
@@ -103,11 +117,20 @@ const Users = () => {
     return 0
   })
 
+  // Group visitors by country for stats
+  const countryStats = visitors.reduce((acc, visitor) => {
+    if (visitor.location && visitor.location.country) {
+      acc[visitor.location.country] = (acc[visitor.location.country] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
   // Get visitor statistics
   const stats = {
     total: visitors.length,
     totalVisits: visitors.reduce((sum, visitor) => sum + (visitor.visitCount || 0), 0),
     uniqueIPs: new Set(visitors.map(visitor => visitor.ip)).size,
+    countries: Object.keys(countryStats).length,
     averageTimeSpent: visitors.length 
       ? Math.round(visitors.reduce((sum, visitor) => sum + (visitor.totalTimeSpent || 0), 0) / visitors.length) 
       : 0
@@ -177,7 +200,7 @@ const Users = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-lg p-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-gray-400 text-xs">Total Visitors</span>
@@ -210,6 +233,16 @@ const Users = () => {
         
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-lg p-4">
           <div className="flex justify-between items-center mb-2">
+            <span className="text-gray-400 text-xs">Countries</span>
+            <div className="w-8 h-8 rounded-full bg-cyan-900/30 flex items-center justify-center">
+              <FaFlag className="text-cyan-400" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-white">{stats.countries}</div>
+        </div>
+        
+        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-lg p-4 col-span-2 lg:col-span-1">
+          <div className="flex justify-between items-center mb-2">
             <span className="text-gray-400 text-xs">Devices</span>
             <div className="flex gap-1">
               <div className="w-8 h-8 rounded-full bg-purple-900/30 flex items-center justify-center">
@@ -232,7 +265,7 @@ const Users = () => {
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs" />
             <input
               type="text"
-              placeholder="Search by IP or browser..."
+              placeholder="Search by IP, location, or browser..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-9 pr-3 py-2.5 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -286,27 +319,34 @@ const Users = () => {
               <thead>
                 <tr className="bg-slate-700/70 border-b border-slate-600">
                   <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">IP Address</th>
+                  <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Location</th>
                   <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Visits</th>
-                  <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">First Visit</th>
+                  <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden md:table-cell">First Visit</th>
                   <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Last Visit</th>
                   <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Time Spent</th>
-                  <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Browser/Device</th>
+                  <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden md:table-cell">Browser/Device</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700/50">
                 {sortedVisitors.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="py-8 text-center text-gray-400">No visitors match your search criteria</td>
+                    <td colSpan="7" className="py-8 text-center text-gray-400">No visitors match your search criteria</td>
                   </tr>
                 ) : (
                   sortedVisitors.map((visitor, index) => (
                     <tr key={index} className="hover:bg-slate-700/30">
                       <td className="py-3 px-4 text-sm font-medium text-white">{visitor.ip || '-'}</td>
+                      <td className="py-3 px-4 text-sm text-gray-300">
+                        <div className="flex items-center">
+                          <FaMapMarkerAlt className="text-red-400 mr-2" />
+                          <span>{formatLocation(visitor.location)}</span>
+                        </div>
+                      </td>
                       <td className="py-3 px-4 text-sm text-gray-300">{visitor.visitCount || 0}</td>
-                      <td className="py-3 px-4 text-sm text-gray-300">{formatDate(visitor.firstVisit)}</td>
+                      <td className="py-3 px-4 text-sm text-gray-300 hidden md:table-cell">{formatDate(visitor.firstVisit)}</td>
                       <td className="py-3 px-4 text-sm text-gray-300">{formatDate(visitor.lastVisit)}</td>
                       <td className="py-3 px-4 text-sm text-gray-300">{formatDuration(visitor.totalTimeSpent)}</td>
-                      <td className="py-3 px-4 text-sm text-gray-300">
+                      <td className="py-3 px-4 text-sm text-gray-300 hidden md:table-cell">
                         <div className="flex items-center">
                           {getBrowserIcon(visitor.browser)}
                           <span className="ml-2">{visitor.browser || '-'} / {visitor.device || '-'}</span>

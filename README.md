@@ -2,12 +2,12 @@
 
 A modern, responsive portfolio website built with React.js and supported by a Node.js/Express backend. This portfolio showcases projects, skills, and professional information with an interactive and visually appealing interface.
 
-![Portfolio Website](https://portfolio.rijoan.com/og-image.png)
+![alt text](image.png)
 
 ## 🌐 Live Demo
 
 - **Portfolio Website:** [portfolio.rijoan.com](https://portfolio.rijoan.com)
-- **API Endpoint:** [api.portfolio.rijoan.com](https://server-theta-roan.vercel.app/api)
+- **API Endpoint:** [https://server-theta-roan.vercel.app/api](https://server-theta-roan.vercel.app/api)
 
 ## ✨ Features
 
@@ -181,9 +181,6 @@ The project is deployed using Vercel:
 - Instagram: [rijoanmaruf](https://www.instagram.com/rijoanmaruf)
 - LeetCode: [mdrijoanmaruf](https://leetcode.com/u/mdrijoanmaruf/)
 
-## 📄 License
-
-This project is licensed under the MIT License.
 
 ## 🙏 Acknowledgements
 

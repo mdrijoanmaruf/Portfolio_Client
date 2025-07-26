@@ -5,18 +5,8 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload, isUploading, imagePreview }) => {
   return (
-    <div 
-      data-aos="fade-right"
-      data-aos-duration="800"
-      data-aos-delay="100"
-      className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4 sm:p-6"
-    >
-      <h3 
-        className="text-lg sm:text-xl font-semibold text-white flex items-center gap-3 mb-4 sm:mb-6"
-        data-aos="fade-up"
-        data-aos-duration="600"
-        data-aos-delay="200"
-      >
+    <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4 sm:p-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-white flex items-center gap-3 mb-4 sm:mb-6">
         <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
           <MdDescription className="text-white text-xs sm:text-sm" />
         </div>
@@ -25,12 +15,7 @@ const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload,
 
       <div className="space-y-4 sm:space-y-6">
         {/* Title */}
-        <div 
-          className="space-y-2"
-          data-aos="fade-up"
-          data-aos-duration="600"
-          data-aos-delay="300"
-        >
+        <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-semibold text-white">
             <MdTitle className="text-blue-400" />
             Project Title *
@@ -47,12 +32,7 @@ const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload,
         </div>
 
         {/* Description */}
-        <div 
-          className="space-y-2"
-          data-aos="fade-up"
-          data-aos-duration="600"
-          data-aos-delay="400"
-        >
+        <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-semibold text-white">
             <MdDescription className="text-blue-400" />
             Description *
@@ -69,12 +49,7 @@ const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload,
         </div>
 
         {/* Project Image Upload with ImgBB */}
-        <div 
-          className="space-y-3"
-          data-aos="fade-up"
-          data-aos-duration="600"
-          data-aos-delay="500"
-        >
+        <div className="space-y-3">
           <label className="flex items-center gap-2 text-sm font-semibold text-white">
             <FaImage className="text-blue-400" />
             Project Image *
@@ -140,12 +115,7 @@ const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload,
         </div>
 
         {/* Featured Toggle */}
-        <div 
-          className="space-y-2"
-          data-aos="fade-up"
-          data-aos-duration="600"
-          data-aos-delay="600"
-        >
+        <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-semibold text-white">
             <FaStar className="text-blue-400" />
             Project Status
