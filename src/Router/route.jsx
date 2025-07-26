@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "../Layout/Root";
+import DashboardLayout from "../Layout/DashboardLayout";
 import Home from "../Pages/Home/Home";
 import About from "../Pages/About/About";
 import EducationPage from "../Pages/Education/EducationPage";
@@ -8,6 +9,7 @@ import AddProject from "../Pages/AddProject/AddProject";
 import ProjectsList from "../Pages/ProjectsList/ProjectsList";
 import ProjectDetails from "../Pages/ProjectDetails/ProjectDetails";
 import Admin from "../Pages/Admin/Admin";
+import Users from "../Pages/AdminDashboard/Users/Users";
 import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
@@ -28,6 +30,10 @@ export const router = createBrowserRouter([
                 Component: EducationPage
             },
             {
+                path: '/add-project',
+                Component: AddProject
+            },
+            {
                 path: '/contact',
                 Component: Contact
             },
@@ -38,9 +44,27 @@ export const router = createBrowserRouter([
             {
                 path: '/projects/:id',
                 Component: ProjectDetails
+            }
+        ]
+    },
+    {
+        path: '/dashboard',
+        element: (
+            <PrivateRoute>
+                <DashboardLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            {
+                index: true,
+                element: (
+                    <PrivateRoute>
+                        <Admin />
+                    </PrivateRoute>
+                )
             },
             {
-                path: '/add-project',
+                path: 'add-project',
                 element: (
                     <PrivateRoute>
                         <AddProject />
@@ -48,10 +72,10 @@ export const router = createBrowserRouter([
                 )
             },
             {
-                path: '/admin',
+                path: 'visitors',
                 element: (
                     <PrivateRoute>
-                        <Admin />
+                        <Users />
                     </PrivateRoute>
                 )
             }

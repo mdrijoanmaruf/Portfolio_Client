@@ -40,7 +40,7 @@ const Navbar = () => {
     { name: 'Education', path: '/education', type: 'route' },
     { name: 'Contact', path: '/contact', type: 'route' },
     { name: 'Projects', path: '/projects', type: 'route' },
-    { name: 'Add Project', path: '/add-project', type: 'route', protected: true }
+    { name: 'Dashboard', path: '/dashboard', type: 'route', protected: true }
   ];
 
   // Check if user has access to protected routes
