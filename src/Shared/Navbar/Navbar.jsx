@@ -14,21 +14,6 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      console.error('Google sign-in error:', error);
-    }
-  };
-
-  const handleLogOut = async () => {
-    try {
-      await logOut();
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
 
   const isActiveRoute = (path) => {
     return location.pathname === path;
@@ -63,31 +48,9 @@ const Navbar = () => {
           {/* Center - Navigation Links (Desktop) */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-6">
-              {navItems.map((item) => (
-                item.protected ? (
-                  hasAccess ? (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                        isActiveRoute(item.path)
-                          ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg'
-                          : 'text-gray-300 hover:text-white hover:bg-slate-800 hover:shadow-md'
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  ) : (
-                    <button
-                      key={item.path}
-                      disabled
-                      className="px-4 py-2 rounded-lg text-sm font-medium opacity-50 cursor-not-allowed text-gray-500"
-                      title="Admin access required"
-                    >
-                      {item.name}
-                    </button>
-                  )
-                ) : (
+              {navItems.map((item) => {
+                if (item.protected && !hasAccess) return null;
+                return (
                   <Link
                     key={item.path}
                     to={item.path}
@@ -99,50 +62,21 @@ const Navbar = () => {
                   >
                     {item.name}
                   </Link>
-                )
-              ))}
+                );
+              })}
             </div>
           </div>
 
           {/* Right side - Authentication (Desktop) */}
-          <div className="hidden md:flex items-center space-x-3">
-            {user ? (
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2">
-                  {user.photoURL ? (
-                    <img 
-                      src={user.photoURL} 
-                      alt="Profile" 
-                      className="w-8 h-8 rounded-full border-2 border-blue-400"
-                    />
-                  ) : (
-                    <FiUser className="w-8 h-8 p-2 bg-slate-700 rounded-full text-gray-300" />
-                  )}
-                  <span className="text-sm text-gray-300 max-w-24 truncate">
-                    {user.displayName || user.email}
-                  </span>
-                </div>
-                <button 
-                  onClick={handleLogOut}
-                  className="p-2 rounded-lg hover:bg-slate-800 transition-all duration-300 hover:shadow-md text-gray-300 hover:text-white"
-                  title="Sign Out"
-                >
-                  <FiLogOut className="h-5 w-5" />
-                </button>
-              </div>
-            ) : (
-              <button 
-                onClick={handleGoogleSignIn}
-                disabled={loading}
-                className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-slate-800 transition-all duration-300 hover:shadow-md text-gray-300 hover:text-white disabled:opacity-50"
-                title="Sign in with Google"
-              >
-                <FcGoogle className="h-5 w-5" />
-                <span className="text-sm font-medium">
-                  {loading ? 'Loading...' : 'Sign In'}
-                </span>
-              </button>
-            )}
+          <div className="hidden md:flex items-center">
+            <a
+              href="https://drive.google.com/uc?export=download&id=1WP6pbZsR_x4b1qlqrzhEZiuDNmSFWqXe"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-cyan-400 hover:to-blue-500 transition-all duration-300 text-sm"
+            >
+              Resume
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -164,31 +98,9 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <div className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 border border-t border-slate-700">
-          {navItems.map((item) => (
-            item.protected ? (
-              hasAccess ? (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 ${
-                    isActiveRoute(item.path)
-                      ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg'
-                      : 'text-gray-300 hover:text-white hover:bg-slate-700'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ) : (
-                <button
-                  key={item.path}
-                  disabled
-                  className="block w-full text-left px-4 py-3 rounded-lg text-base font-medium opacity-50 cursor-not-allowed text-gray-500"
-                >
-                  {item.name} (Admin Only)
-                </button>
-              )
-            ) : (
+          {navItems.map((item) => {
+            if (item.protected && !hasAccess) return null;
+            return (
               <Link
                 key={item.path}
                 to={item.path}
@@ -201,52 +113,19 @@ const Navbar = () => {
               >
                 {item.name}
               </Link>
-            )
-          ))}
+            );
+          })}
           
-          {/* Authentication for Mobile */}
+          {/* Resume Button for Mobile */}
           <div className="px-4 py-3 border-t border-slate-600">
-            {user ? (
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  {user.photoURL ? (
-                    <img 
-                      src={user.photoURL} 
-                      alt="Profile" 
-                      className="w-10 h-10 rounded-full border-2 border-blue-400"
-                    />
-                  ) : (
-                    <FiUser className="w-10 h-10 p-2 bg-slate-700 rounded-full text-gray-300" />
-                  )}
-                  <div className="flex-1">
-                    <p className="text-white font-medium text-sm">
-                      {user.displayName || 'User'}
-                    </p>
-                    <p className="text-gray-400 text-xs truncate">
-                      {user.email}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleLogOut}
-                  className="flex items-center space-x-2 w-full p-2 rounded-lg hover:bg-slate-700 transition-all duration-300 text-gray-300 hover:text-white"
-                >
-                  <FiLogOut className="h-5 w-5" />
-                  <span className="text-sm font-medium">Sign Out</span>
-                </button>
-              </div>
-            ) : (
-              <button 
-                onClick={handleGoogleSignIn}
-                disabled={loading}
-                className="flex items-center space-x-2 w-full p-2 rounded-lg hover:bg-slate-700 transition-all duration-300 text-gray-300 hover:text-white disabled:opacity-50"
-              >
-                <FcGoogle className="h-6 w-6" />
-                <span className="text-sm font-medium">
-                  {loading ? 'Loading...' : 'Sign in with Google'}
-                </span>
-              </button>
-            )}
+            <a
+              href="https://drive.google.com/uc?export=download&id=1WP6pbZsR_x4b1qlqrzhEZiuDNmSFWqXe"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center px-5 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-cyan-400 hover:to-blue-500 transition-all duration-300 text-base"
+            >
+              Resume
+            </a>
           </div>
         </div>
       </div>

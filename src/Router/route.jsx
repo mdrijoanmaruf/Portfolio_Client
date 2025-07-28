@@ -12,6 +12,8 @@ import Admin from "../Pages/Admin/Admin";
 import Users from "../Pages/AdminDashboard/Users/Users";
 import PrivateRoute from "./PrivateRoute";
 import PageNotFound from "../Pages/PageNotFound/PageNotFound";
+import Login from "../Pages/Login/Login";
+import Forbidden from "../Pages/Forbidden/Forbidden";
 
 export const router = createBrowserRouter([
     {
@@ -31,12 +33,6 @@ export const router = createBrowserRouter([
                 Component: EducationPage
             },
             {
-                path: '/add-project',
-                element: <PrivateRoute>
-                    <AddProject />
-                </PrivateRoute>
-            },
-            {
                 path: '/contact',
                 Component: Contact
             },
@@ -45,8 +41,16 @@ export const router = createBrowserRouter([
                 Component: ProjectsList
             },
             {
+                path: '/login',
+                Component: Login
+            },
+            {
                 path: '/projects/:id',
                 Component: ProjectDetails
+            },
+            {
+                path: '/forbidden',
+                Component: Forbidden
             },
             {
                 path: "*",
@@ -70,7 +74,9 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'add-project',
-                Component: AddProject
+                element: <PrivateRoute>
+                    <AddProject></AddProject>
+                </PrivateRoute>
             },
             {
                 path: 'visitors',

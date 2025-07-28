@@ -41,8 +41,12 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  if (!user || user.email !== "rijoanmaruf@gmail.com") {
-    return <Navigate to="/" replace />;
+  if (user.email !== "rijoanmaruf@gmail.com") {
+    return <Navigate to="/forbidden" replace />;
+  }
+
+  if(!user){
+    return <Navigate to='/login' replace></Navigate>
   }
 
   return children;
