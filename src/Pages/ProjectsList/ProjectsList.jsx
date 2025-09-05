@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FaEye, FaEdit, FaTrash, FaGithub, FaExternalLinkAlt, FaStar, FaFilter, FaSearch, FaCode, FaLaptop, FaServer } from 'react-icons/fa'
+import { FaEye, FaEdit, FaTrash, FaGithub, FaExternalLinkAlt, FaStar, FaFilter, FaSearch, FaCode, FaLaptop, FaServer, FaVideo } from 'react-icons/fa'
 import { MdGridView, MdViewList } from 'react-icons/md'
 import { projectsAPI } from '../../utils/api'
 import useAuth from '../../Hooks/useAuth'
@@ -365,6 +365,18 @@ const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit,
             >
               <FaExternalLinkAlt className="text-xs" />
               Live Demo
+            </a>
+          )}
+          {project.liveVideoUrl && (
+            <a
+              href={project.liveVideoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-red-600/90 backdrop-blur-sm text-white rounded-xl hover:bg-red-500 transition-all duration-200 text-sm font-medium shadow-lg"
+            >
+              <FaVideo className="text-xs" />
+              Video
             </a>
           )}
           <button

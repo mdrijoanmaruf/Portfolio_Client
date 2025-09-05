@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaCode, FaLaptop, FaServer, FaExternalLinkAlt } from 'react-icons/fa'
+import { FaCode, FaLaptop, FaServer, FaExternalLinkAlt, FaVideo } from 'react-icons/fa'
 
 const ProjectLinksSection = ({ formData, handleInputChange }) => {
   return (
@@ -57,6 +57,23 @@ const ProjectLinksSection = ({ formData, handleInputChange }) => {
             value={formData.liveLink}
             onChange={handleInputChange}
             placeholder="https://your-awesome-project.com"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all text-sm sm:text-base"
+          />
+        </div>
+
+        {/* Live Video URL */}
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 text-sm font-semibold text-white">
+            <FaVideo className="text-purple-400" />
+            Live Video Demo
+            <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+          </label>
+          <input
+            type="url"
+            name="liveVideoUrl"
+            value={formData.liveVideoUrl}
+            onChange={handleInputChange}
+            placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
             className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all text-sm sm:text-base"
           />
         </div>

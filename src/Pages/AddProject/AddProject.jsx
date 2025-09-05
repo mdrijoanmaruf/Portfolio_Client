@@ -31,6 +31,7 @@ const AddProject = () => {
     clientSourceCode: '',
     serverSourceCode: '',
     liveLink: '',
+    liveVideoUrl: '',
     isFeatured: false,
     tags: []
   });
@@ -68,6 +69,7 @@ const AddProject = () => {
               clientSourceCode: project.clientSourceCode || '',
               serverSourceCode: project.serverSourceCode || '',
               liveLink: project.liveLink || '',
+              liveVideoUrl: project.liveVideoUrl || '',
               isFeatured: project.isFeatured || false,
               tags: project.tags || []
             })
@@ -351,6 +353,7 @@ const AddProject = () => {
             clientSourceCode: '',
             serverSourceCode: '',
             liveLink: '',
+            liveVideoUrl: '',
             isFeatured: false,
             tags: []
           });

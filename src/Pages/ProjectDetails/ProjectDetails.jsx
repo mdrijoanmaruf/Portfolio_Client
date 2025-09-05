@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { FaArrowLeft, FaGithub, FaExternalLinkAlt, FaStar, FaCalendar, FaLaptop, FaServer, FaCode, FaEye } from 'react-icons/fa'
+import { FaArrowLeft, FaGithub, FaExternalLinkAlt, FaStar, FaCalendar, FaLaptop, FaServer, FaCode, FaEye, FaVideo } from 'react-icons/fa'
 import { MdEdit, MdDelete } from 'react-icons/md'
 import { projectsAPI } from '../../utils/api'
 import useAuth from '../../Hooks/useAuth'
@@ -76,7 +76,7 @@ const ProjectDetails = () => {
 
   if (error || !project) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-400 text-2xl mb-6">{error || 'Project not found'}</div>
           <button
@@ -91,7 +91,7 @@ const ProjectDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className="min-h-screen">
       {/* Navigation */}
       <div className="sticky top-0 z-10 bg-slate-900/80 backdrop-blur-sm border-b border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -167,6 +167,18 @@ const ProjectDetails = () => {
               >
                 <FaExternalLinkAlt />
                 View Live Demo
+              </a>
+            )}
+            
+            {project.liveVideoUrl && (
+              <a
+                href={project.liveVideoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+              >
+                <FaVideo />
+                Watch Demo Video
               </a>
             )}
             

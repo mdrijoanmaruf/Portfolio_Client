@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FaEye, FaExternalLinkAlt, FaStar, FaLaptop, FaServer, FaGithub } from 'react-icons/fa'
+import { FaEye, FaExternalLinkAlt, FaStar, FaLaptop, FaServer, FaGithub, FaVideo } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { projectsAPI } from '../../../utils/api'
 import Loading from '../../../Shared/LoadingAnimation/Loading'
@@ -171,6 +171,18 @@ const FeaturedProjectCard = ({ project, index, onViewDetails }) => {
             >
               <FaExternalLinkAlt className="text-xs" />
               Live Demo
+            </a>
+          )}
+          {project.liveVideoUrl && (
+            <a
+              href={project.liveVideoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-red-600/90 backdrop-blur-sm text-white rounded-xl hover:bg-red-500 transition-all duration-200 text-sm font-medium shadow-lg"
+            >
+              <FaVideo className="text-xs" />
+              Video
             </a>
           )}
           <button
