@@ -45,11 +45,6 @@ const DashboardLayout = () => {
       name: 'Add Project',
       icon: <FaPlus className="text-green-400" />
     },
-    {
-      path: '/dashboard/visitors',
-      name: 'Visitors',
-      icon: <FaUsers className="text-orange-400" />
-    },
   ]
 
   const isActive = (path) => {

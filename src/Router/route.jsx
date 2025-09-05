@@ -9,7 +9,6 @@ import AddProject from "../Pages/AddProject/AddProject";
 import ProjectsList from "../Pages/ProjectsList/ProjectsList";
 import ProjectDetails from "../Pages/ProjectDetails/ProjectDetails";
 import Admin from "../Pages/Admin/Admin";
-import Users from "../Pages/AdminDashboard/Users/Users";
 import PrivateRoute from "./PrivateRoute";
 import PageNotFound from "../Pages/PageNotFound/PageNotFound";
 import Login from "../Pages/Login/Login";
@@ -77,14 +76,6 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute>
                     <AddProject></AddProject>
                 </PrivateRoute>
-            },
-            {
-                path: 'visitors',
-                element: (
-                    <PrivateRoute>
-                        <Users />
-                    </PrivateRoute>
-                )
             }
         ]
     }

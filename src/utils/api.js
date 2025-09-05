@@ -1,6 +1,6 @@
 // API configuration
-const API_BASE_URL = 'https://server-theta-roan.vercel.app/api';
-// const API_BASE_URL = 'http://localhost:5000/api';
+// const API_BASE_URL = 'https://server-theta-roan.vercel.app/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 // Helper function for making API requests
 const apiRequest = async (endpoint, options = {}) => {
@@ -72,27 +72,6 @@ export const projectsAPI = {
 
   // Search projects
   search: (query) => apiRequest(`/projects/search/${encodeURIComponent(query)}`),
-};
-
-// Visitor tracking API functions
-export const visitorsAPI = {
-  // Get all visitors (admin only)
-  getAll: (userEmail) => apiRequest(`/visitors?userEmail=${encodeURIComponent(userEmail)}`),
-
-  // Track page visit
-  trackVisit: (pageData) => apiRequest('/track/page-view', {
-    method: 'POST',
-    body: JSON.stringify(pageData),
-  }),
-
-  // Track session end
-  endSession: (sessionData) => apiRequest('/track/end-session', {
-    method: 'POST',
-    body: JSON.stringify(sessionData),
-  }),
-
-  // Get visitor statistics
-  getStats: (userEmail) => apiRequest(`/visitors/stats?userEmail=${encodeURIComponent(userEmail)}`),
 };
 
 // Coursework API functions
