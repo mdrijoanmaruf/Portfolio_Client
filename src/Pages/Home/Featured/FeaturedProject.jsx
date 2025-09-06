@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FaEye, FaExternalLinkAlt, FaStar, FaLaptop, FaServer, FaGithub, FaVideo } from 'react-icons/fa'
+import { FaEye, FaExternalLinkAlt, FaStar, FaLaptop, FaServer, FaGithub, FaVideo, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { projectsAPI } from '../../../utils/api'
 import Loading from '../../../Shared/LoadingAnimation/Loading'
@@ -20,7 +20,11 @@ const FeaturedProject = () => {
       setLoading(true)
       const response = await projectsAPI.getFeatured()
       if (response.success) {
-        setFeaturedProjects(response.data)
+        // Sort projects by newest first (based on createdAt date)
+        const sortedProjects = response.data.sort((a, b) => 
+          new Date(b.createdAt) - new Date(a.createdAt)
+        )
+        setFeaturedProjects(sortedProjects)
         setError(null)
       } else {
         setError('Failed to fetch featured projects')
@@ -135,20 +139,77 @@ const FeaturedProject = () => {
 }
 
 const FeaturedProjectCard = ({ project, index, onViewDetails }) => {
+  // Handle multiple images - use first image or fallback to single image
+  const displayImages = project.images && project.images.length > 0 ? project.images : [project.image];
+  const hasMultipleImages = displayImages.length > 1;
+  
+  // State for image carousel
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  
+  // Auto-slide effect for multiple images
+  useEffect(() => {
+    if (hasMultipleImages && !isPaused) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => 
+          prevIndex === displayImages.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 4000); // Change image every 4 seconds
+      
+      return () => clearInterval(interval);
+    }
+  }, [hasMultipleImages, displayImages.length, isPaused]);
+  
+  const nextImage = (e) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === displayImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+  
+  const prevImage = (e) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === 0 ? displayImages.length - 1 : prevIndex - 1
+    );
+  };
+  
+  const goToImage = (e, index) => {
+    e.stopPropagation();
+    setCurrentImageIndex(index);
+  };
+
   return (
     <div
       className="group relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-lg border border-slate-700/50 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
       data-aos="fade-up"
       data-aos-duration="600"
       data-aos-delay={index * 100}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Project Image */}
+      {/* Project Image with Slider */}
       <div className="relative h-48 sm:h-56 overflow-hidden">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-        />
+        {/* Multiple Images with Smooth Transitions */}
+        {displayImages.map((image, imageIndex) => (
+          <div
+            key={imageIndex}
+            className={`absolute inset-0 transition-all duration-1000 ease-out ${
+              imageIndex === currentImageIndex 
+                ? 'opacity-100 scale-100' 
+                : 'opacity-0 scale-110'
+            }`}
+          >
+            <img
+              src={image}
+              alt={`${project.title} - Image ${imageIndex + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+        
+        {/* Shimmer Effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1500" />
         
         {/* Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -158,6 +219,49 @@ const FeaturedProjectCard = ({ project, index, onViewDetails }) => {
           <FaStar className="text-xs" />
           Featured
         </div>
+
+        {/* Image Counter Badge */}
+        {hasMultipleImages && (
+          <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm">
+            {currentImageIndex + 1}/{displayImages.length}
+          </div>
+        )}
+
+        {/* Navigation Controls for Multiple Images */}
+        {hasMultipleImages && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/60 backdrop-blur-sm text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-black/80 hover:scale-110 transition-all duration-300 z-10"
+              title="Previous Image"
+            >
+              <FaChevronLeft className="text-xs" />
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/60 backdrop-blur-sm text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-black/80 hover:scale-110 transition-all duration-300 z-10"
+              title="Next Image"
+            >
+              <FaChevronRight className="text-xs" />
+            </button>
+            
+            {/* Image Indicators */}
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+              {displayImages.map((_, imageIndex) => (
+                <button
+                  key={imageIndex}
+                  onClick={(e) => goToImage(e, imageIndex)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentImageIndex === imageIndex 
+                      ? 'bg-white scale-125 shadow-lg' 
+                      : 'bg-white/60 hover:bg-white/90 hover:scale-110'
+                  }`}
+                  title={`Go to image ${imageIndex + 1}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Quick Actions Overlay */}
         <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">

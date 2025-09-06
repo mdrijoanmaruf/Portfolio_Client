@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { FaArrowLeft, FaGithub, FaExternalLinkAlt, FaStar, FaCalendar, FaLaptop, FaServer, FaCode, FaEye, FaVideo } from 'react-icons/fa'
+import { FaArrowLeft, FaGithub, FaExternalLinkAlt, FaStar, FaCalendar, FaLaptop, FaServer, FaCode, FaEye, FaVideo, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { MdEdit, MdDelete } from 'react-icons/md'
 import { projectsAPI } from '../../utils/api'
 import useAuth from '../../Hooks/useAuth'
@@ -15,11 +15,50 @@ const ProjectDetails = () => {
   const [error, setError] = useState(null)
   const [imageLoaded, setImageLoaded] = useState(false)
   
+  // Image slider state
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  
   const isAdmin = user?.email === 'rijoanmaruf@gmail.com'
 
   useEffect(() => {
     fetchProject()
   }, [id])
+
+  // Auto-slide effect for multiple images
+  useEffect(() => {
+    if (project?.images && project.images.length > 1 && !isPaused) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => 
+          prevIndex === project.images.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 5000); // Change image every 5 seconds
+      
+      return () => clearInterval(interval);
+    }
+  }, [project?.images, isPaused]);
+
+  // Navigation functions for image slider
+  const nextImage = () => {
+    if (project?.images && project.images.length > 1) {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === project.images.length - 1 ? 0 : prevIndex + 1
+      );
+    }
+  };
+  
+  const prevImage = () => {
+    if (project?.images && project.images.length > 1) {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === 0 ? project.images.length - 1 : prevIndex - 1
+      );
+    }
+  };
+  
+  const goToImage = (index) => {
+    setCurrentImageIndex(index);
+  };
 
   const fetchProject = async () => {
     try {
@@ -212,24 +251,122 @@ const ProjectDetails = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Images and Description */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Project Images Gallery */}
+            {/* Project Images Gallery with Slider */}
             {project.images && project.images.length > 0 ? (
               <div className="space-y-4">
-                <h2 className="text-xl font-bold text-white mb-4">Project Gallery</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {project.images.map((imageUrl, index) => (
-                    <div key={index} className="relative rounded-2xl overflow-hidden shadow-2xl">
-                      <img
-                        src={imageUrl}
-                        alt={`${project.title} - Image ${index + 1}`}
-                        className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-                        {index + 1} of {project.images.length}
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-white">Project Gallery</h2>
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <span>{currentImageIndex + 1} of {project.images.length}</span>
+                  </div>
                 </div>
+                
+                {/* Main Image Slider */}
+                <div 
+                  className="relative rounded-2xl overflow-hidden shadow-2xl group"
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
+                >
+                  {/* Image Container */}
+                  <div className="relative h-96 sm:h-[500px] lg:h-[600px]">
+                    {project.images.map((imageUrl, index) => (
+                      <div
+                        key={index}
+                        className={`absolute inset-0 transition-all duration-1000 ease-out ${
+                          index === currentImageIndex 
+                            ? 'opacity-100 scale-100' 
+                            : 'opacity-0 scale-110'
+                        }`}
+                      >
+                        <img
+                          src={imageUrl}
+                          alt={`${project.title} - Image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                    
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+                    
+                    {/* Shimmer Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1500" />
+                  </div>
+                  
+                  {/* Navigation Controls */}
+                  {project.images.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/60 backdrop-blur-sm text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-black/80 hover:scale-110 transition-all duration-300 z-10"
+                        title="Previous Image"
+                      >
+                        <FaChevronLeft className="text-lg" />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/60 backdrop-blur-sm text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-black/80 hover:scale-110 transition-all duration-300 z-10"
+                        title="Next Image"
+                      >
+                        <FaChevronRight className="text-lg" />
+                      </button>
+                    </>
+                  )}
+                  
+                  {/* Image Counter Badge */}
+                  <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium backdrop-blur-sm">
+                    {currentImageIndex + 1} / {project.images.length}
+                  </div>
+                  
+                  {/* Auto-play Indicator */}
+                  {project.images.length > 1 && !isPaused && (
+                    <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs backdrop-blur-sm">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      Auto-play
+                    </div>
+                  )}
+                </div>
+                
+                {/* Thumbnail Navigation */}
+                {project.images.length > 1 && (
+                  <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                    {project.images.map((imageUrl, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToImage(index)}
+                        className={`flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden transition-all duration-300 ${
+                          currentImageIndex === index 
+                            ? 'ring-3 ring-blue-500 scale-105 shadow-lg shadow-blue-500/50' 
+                            : 'ring-2 ring-slate-600 hover:ring-slate-400 hover:scale-105'
+                        }`}
+                      >
+                        <img
+                          src={imageUrl}
+                          alt={`Thumbnail ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Image Indicators (Dots) */}
+                {project.images.length > 1 && (
+                  <div className="flex justify-center gap-2 mt-4">
+                    {project.images.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToImage(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          currentImageIndex === index 
+                            ? 'bg-blue-500 scale-125 shadow-lg shadow-blue-500/50' 
+                            : 'bg-slate-600 hover:bg-slate-400 hover:scale-110'
+                        }`}
+                        title={`Go to image ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
               /* Single Project Image (Fallback) */

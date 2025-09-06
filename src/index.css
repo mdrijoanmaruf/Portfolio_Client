@@ -43,6 +43,16 @@
   background: #64748b;
 }
 
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Additional responsive breakpoints */
 @media (min-width: 475px) {
   .xs\:flex-row {
