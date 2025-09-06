@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { FaHome, FaPlus, FaUsers, FaProjectDiagram, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa'
 import useAuth from '../Hooks/useAuth'
+import ScrollToTop from '../components/ScrollToTop'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
@@ -53,6 +54,7 @@ const DashboardLayout = () => {
 
   return (
     <div className="flex flex-col h-screen bg-[linear-gradient(to_bottom_right,#000000,#111111,#0a0a0a)] bg-fixed">
+      <ScrollToTop />
       {/* Top Header */}
       <header className="sticky top-0 z-40 bg-black/60 backdrop-blur-xl border-b border-slate-700/40 shadow-lg shadow-blue-900/10">
         <div className="flex items-center justify-between h-16 px-4 md:px-8">
