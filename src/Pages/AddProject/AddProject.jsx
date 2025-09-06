@@ -27,7 +27,8 @@ const AddProject = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    image: '',
+    image: '', // Keep for backward compatibility
+    images: [], // New field for multiple images
     clientSourceCode: '',
     serverSourceCode: '',
     liveLink: '',
@@ -43,6 +44,7 @@ const AddProject = () => {
   // New states for image upload
   const [isUploading, setIsUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreviews, setImagePreviews] = useState([]); // For multiple images
 
   // Redirect non-admin users
   useEffect(() => {
@@ -66,6 +68,7 @@ const AddProject = () => {
               title: project.title || '',
               description: project.description || '',
               image: project.image || '',
+              images: project.images || [], // Load multiple images
               clientSourceCode: project.clientSourceCode || '',
               serverSourceCode: project.serverSourceCode || '',
               liveLink: project.liveLink || '',
@@ -73,9 +76,20 @@ const AddProject = () => {
               isFeatured: project.isFeatured || false,
               tags: project.tags || []
             })
-            // Set image preview for existing project
-            if (project.image) {
+            
+            // Handle image previews - prioritize multiple images over single image
+            if (project.images && project.images.length > 0) {
+              // Use multiple images
+              setImagePreviews(project.images);
+              setImagePreview(null); // Clear single image preview
+            } else if (project.image) {
+              // Fallback to single image for backward compatibility
               setImagePreview(project.image);
+              setImagePreviews([]); // Clear multiple image previews
+            } else {
+              // No images
+              setImagePreview(null);
+              setImagePreviews([]);
             }
           } else {
             setSubmitStatus('error')
@@ -138,19 +152,54 @@ const AddProject = () => {
     }));
   };
 
-  // Handle image upload with ImgBB
+  // Handle image upload with ImgBB (supports multiple files)
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
+    const files = Array.from(e.target.files);
     
-    if (!file) return;
+    if (!files.length) return;
     
-    // Only allow image files
-    if (!file.type.match(/image\/(jpeg|jpg|png|gif|webp)/)) {
+    // Validate all files
+    for (let file of files) {
+      // Only allow image files
+      if (!file.type.match(/image\/(jpeg|jpg|png|gif|webp)/)) {
+        Swal.fire({
+          title: 'Invalid File Type',
+          text: `Please select valid image files (JPEG, PNG, GIF, or WEBP). Found invalid file: ${file.name}`,
+          icon: 'error',
+          confirmButtonColor: '#ef4444',
+          background: '#1e293b',
+          color: '#ffffff',
+          customClass: {
+            popup: 'border border-slate-600'
+          }
+        });
+        return;
+      }
+      
+      // File size validation (max 2MB per file)
+      if (file.size > 2 * 1024 * 1024) {
+        Swal.fire({
+          title: 'File Too Large',
+          text: `Please select images less than 2MB each. File "${file.name}" is too large.`,
+          icon: 'error',
+          confirmButtonColor: '#ef4444',
+          background: '#1e293b',
+          color: '#ffffff',
+          customClass: {
+            popup: 'border border-slate-600'
+          }
+        });
+        return;
+      }
+    }
+    
+    // Check total number of images (limit to 5)
+    if (files.length + imagePreviews.length > 5) {
       Swal.fire({
-        title: 'Invalid File Type',
-        text: 'Please select a valid image file (JPEG, PNG, GIF, or WEBP)',
-        icon: 'error',
-        confirmButtonColor: '#ef4444',
+        title: 'Too Many Images',
+        text: 'You can upload a maximum of 5 images per project.',
+        icon: 'warning',
+        confirmButtonColor: '#f59e0b',
         background: '#1e293b',
         color: '#ffffff',
         customClass: {
@@ -160,36 +209,21 @@ const AddProject = () => {
       return;
     }
     
-    // File size validation (max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      Swal.fire({
-        title: 'File Too Large',
-        text: 'Please select an image less than 2MB',
-        icon: 'error',
-        confirmButtonColor: '#ef4444',
-        background: '#1e293b',
-        color: '#ffffff',
-        customClass: {
-          popup: 'border border-slate-600'
-        }
+    // Show local previews before upload
+    const newPreviews = [];
+    for (let file of files) {
+      const reader = new FileReader();
+      const previewPromise = new Promise((resolve) => {
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
       });
-      return;
+      newPreviews.push(await previewPromise);
     }
     
-    // Show local preview before upload
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
-    
+    setImagePreviews(prev => [...prev, ...newPreviews]);
     setIsUploading(true);
     
     try {
-      // Create FormData and append the file
-      const formData = new FormData();
-      formData.append('image', file);
-      
       // Get API key from environment variables
       const apiKey = import.meta.env.VITE_IMGBB_API;
       
@@ -197,43 +231,54 @@ const AddProject = () => {
         throw new Error('ImgBB API key not found');
       }
       
-      // Upload to ImgBB
-      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
-        method: 'POST',
-        body: formData
+      // Upload all files
+      const uploadPromises = files.map(async (file) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          return result.data.url;
+        } else {
+          throw new Error(result.error?.message || 'Failed to upload image');
+        }
       });
       
-      const result = await response.json();
+      const uploadedUrls = await Promise.all(uploadPromises);
       
-      if (result.success) {
-        // Update form data with the uploaded image URL
-        setFormData(prev => ({
-          ...prev,
-          image: result.data.url
-        }));
-        
-        Swal.fire({
-          title: 'Image Uploaded',
-          text: 'Your image has been uploaded successfully!',
-          icon: 'success',
-          confirmButtonColor: '#10b981',
-          timer: 2000,
-          timerProgressBar: true,
-          background: '#1e293b',
-          color: '#ffffff',
-          customClass: {
-            popup: 'border border-slate-600'
-          }
-        });
-      } else {
-        throw new Error(result.error?.message || 'Failed to upload image');
-      }
+      // Update form data with the uploaded image URLs
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...uploadedUrls],
+        // Set first image as main image for backward compatibility
+        image: prev.image || uploadedUrls[0]
+      }));
+      
+      Swal.fire({
+        title: 'Images Uploaded',
+        text: `${uploadedUrls.length} image(s) have been uploaded successfully!`,
+        icon: 'success',
+        confirmButtonColor: '#10b981',
+        timer: 2000,
+        timerProgressBar: true,
+        background: '#1e293b',
+        color: '#ffffff',
+        customClass: {
+          popup: 'border border-slate-600'
+        }
+      });
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error uploading images:', error);
       
       Swal.fire({
         title: 'Upload Failed',
-        text: error.message || 'Failed to upload image. Please try again.',
+        text: error.message || 'Failed to upload images. Please try again.',
         icon: 'error',
         confirmButtonColor: '#ef4444',
         background: '#1e293b',
@@ -243,11 +288,25 @@ const AddProject = () => {
         }
       });
       
-      // Reset preview on error
-      setImagePreview(null);
+      // Reset previews on error
+      setImagePreviews(prev => prev.slice(0, -files.length));
     } finally {
       setIsUploading(false);
     }
+  };
+
+  // Remove image from the gallery
+  const removeImage = (indexToRemove) => {
+    const updatedImages = formData.images.filter((_, index) => index !== indexToRemove);
+    const updatedPreviews = imagePreviews.filter((_, index) => index !== indexToRemove);
+    
+    setFormData(prev => ({
+      ...prev,
+      images: updatedImages,
+      // Update main image field - use first image or empty string
+      image: updatedImages.length > 0 ? updatedImages[0] : ''
+    }));
+    setImagePreviews(updatedPreviews);
   };
 
   const addTag = () => {
@@ -350,6 +409,7 @@ const AddProject = () => {
             title: '',
             description: '',
             image: '',
+            images: [],
             clientSourceCode: '',
             serverSourceCode: '',
             liveLink: '',
@@ -358,6 +418,7 @@ const AddProject = () => {
             tags: []
           });
           setImagePreview(null);
+          setImagePreviews([]);
         }
         
         // Redirect to projects list
@@ -469,6 +530,8 @@ const AddProject = () => {
                     handleImageUpload={handleImageUpload}
                     isUploading={isUploading}
                     imagePreview={imagePreview}
+                    imagePreviews={imagePreviews}
+                    removeImage={removeImage}
                   />
                 </div>
 

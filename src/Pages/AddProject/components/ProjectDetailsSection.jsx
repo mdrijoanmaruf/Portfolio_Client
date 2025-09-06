@@ -1,9 +1,9 @@
 import React from 'react'
-import { FaImage, FaStar, FaUpload } from 'react-icons/fa'
+import { FaImage, FaStar, FaUpload, FaTimes } from 'react-icons/fa'
 import { MdDescription, MdTitle } from 'react-icons/md'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
-const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload, isUploading, imagePreview }) => {
+const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload, isUploading, imagePreview, imagePreviews, removeImage }) => {
   return (
     <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4 sm:p-6">
       <h3 className="text-lg sm:text-xl font-semibold text-white flex items-center gap-3 mb-4 sm:mb-6">
@@ -48,11 +48,11 @@ const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload,
           />
         </div>
 
-        {/* Project Image Upload with ImgBB */}
+        {/* Project Images Upload with ImgBB */}
         <div className="space-y-3">
           <label className="flex items-center gap-2 text-sm font-semibold text-white">
             <FaImage className="text-blue-400" />
-            Project Image *
+            Project Images * <span className="text-xs text-gray-400 font-normal">(Up to 5 images)</span>
           </label>
 
           {/* Image upload section */}
@@ -65,41 +65,96 @@ const ProjectDetailsSection = ({ formData, handleInputChange, handleImageUpload,
                 accept="image/*"
                 onChange={handleImageUpload}
                 className="hidden"
-                disabled={isUploading}
+                disabled={isUploading || imagePreviews.length >= 5}
+                multiple
               />
               <label 
                 htmlFor="imageUpload" 
-                className={`flex items-center justify-center gap-2 w-full py-3 px-4 cursor-pointer rounded-lg border border-dashed border-blue-400 transition-all
-                  ${isUploading 
-                    ? 'bg-slate-700/30 cursor-not-allowed' 
-                    : 'bg-slate-700/50 hover:bg-slate-700/70'}`}
+                className={`flex items-center justify-center gap-2 w-full py-3 px-4 cursor-pointer rounded-lg border border-dashed transition-all
+                  ${imagePreviews.length >= 5 
+                    ? 'border-gray-500 bg-slate-700/30 cursor-not-allowed'
+                    : isUploading 
+                      ? 'border-blue-400 bg-slate-700/30 cursor-not-allowed' 
+                      : 'border-blue-400 bg-slate-700/50 hover:bg-slate-700/70'}`}
               >
                 {isUploading ? (
                   <AiOutlineLoading3Quarters className="text-blue-400 animate-spin mr-2" />
                 ) : (
-                  <FaUpload className="text-blue-400 mr-2" />
+                  <FaUpload className={`mr-2 ${imagePreviews.length >= 5 ? 'text-gray-500' : 'text-blue-400'}`} />
                 )}
-                <span className="text-white text-sm">
+                <span className={`text-sm ${imagePreviews.length >= 5 ? 'text-gray-500' : 'text-white'}`}>
                   {isUploading 
-                    ? 'Uploading image...' 
-                    : formData.image 
-                      ? 'Change project image' 
-                      : 'Upload project image'
+                    ? 'Uploading images...' 
+                    : imagePreviews.length >= 5
+                      ? 'Maximum 5 images reached'
+                      : imagePreviews.length > 0
+                        ? `Add more images (${5 - imagePreviews.length} remaining)`
+                        : 'Upload project images (multiple selection supported)'
                   }
                 </span>
               </label>
             </div>
 
-            {/* Image preview section */}
-            {(imagePreview || formData.image) && !isUploading && (
+            {/* Multiple images preview section */}
+            {imagePreviews.length > 0 && (
+              <div className="mt-2">
+                <div className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                  <h4 className="text-white text-sm font-medium mb-3 flex items-center justify-between">
+                    <span>Project Images ({imagePreviews.length}/5)</span>
+                    {imagePreviews.length < 5 && (
+                      <span className="text-xs text-blue-400">
+                        You can add {5 - imagePreviews.length} more image{5 - imagePreviews.length > 1 ? 's' : ''}
+                      </span>
+                    )}
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="relative group">
+                        <img 
+                          src={preview} 
+                          alt={`Project preview ${index + 1}`} 
+                          className="w-full h-24 sm:h-32 object-cover rounded-lg border border-slate-600"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 hover:scale-110"
+                        >
+                          <FaTimes className="text-xs" />
+                        </button>
+                        <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-1 py-0.5 rounded">
+                          {index + 1}
+                        </div>
+                        {index === 0 && (
+                          <div className="absolute top-1 left-1 bg-blue-500/90 text-white text-xs px-1 py-0.5 rounded">
+                            Main
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  {/* Hidden input for form submission */}
+                  <input
+                    type="hidden"
+                    name="images"
+                    value={JSON.stringify(formData.images)}
+                  />
+                  <p className="text-xs text-gray-400 mt-2">
+                    The first image will be used as the main project image.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Single image preview for backward compatibility */}
+            {imagePreview && imagePreviews.length === 0 && (
               <div className="mt-2 relative">
                 <div className="bg-slate-700/50 p-2 rounded-lg border border-slate-600">
                   <img 
-                    src={imagePreview || formData.image} 
+                    src={imagePreview} 
                     alt="Project preview" 
                     className="w-full h-auto max-h-64 object-contain rounded-lg"
                   />
-                  {/* Hidden image URL for form submission */}
                   <input
                     type="hidden"
                     name="image"

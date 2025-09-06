@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FaEye, FaEdit, FaTrash, FaGithub, FaExternalLinkAlt, FaStar, FaFilter, FaSearch, FaCode, FaLaptop, FaServer, FaVideo } from 'react-icons/fa'
-import { MdGridView, MdViewList } from 'react-icons/md'
+import { FaEye, FaEdit, FaTrash, FaGithub, FaExternalLinkAlt, FaStar, FaFilter, FaSearch, FaCode, FaLaptop, FaServer, FaVideo, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { projectsAPI } from '../../utils/api'
 import useAuth from '../../Hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
@@ -13,7 +12,6 @@ const ProjectsList = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
-  const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false)
   
   const { user } = useAuth()
@@ -79,7 +77,7 @@ const ProjectsList = () => {
   }
 
   const handleEdit = (projectId) => {
-    navigate(`/add-project?edit=${projectId}`)
+    navigate(`/dashboard/add-project?edit=${projectId}`)
   }
 
   const handleDelete = async (projectId) => {
@@ -204,32 +202,6 @@ const ProjectsList = () => {
                 <span className="hidden xs:inline">Featured</span>
                 <span className="xs:hidden">⭐</span>
               </button>
-
-              {/* View Mode Toggle */}
-              <div className="flex bg-slate-700/50 rounded-lg border border-slate-600">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2.5 xs:p-3 rounded-l-lg transition-all min-h-[44px] min-w-[44px] ${
-                    viewMode === 'grid'
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-400 hover:text-white hover:bg-slate-600/50'
-                  }`}
-                  title="Grid View"
-                >
-                  <MdGridView className="text-sm sm:text-base" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-2.5 xs:p-3 rounded-r-lg transition-all min-h-[44px] min-w-[44px] ${
-                    viewMode === 'list'
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-400 hover:text-white hover:bg-slate-600/50'
-                  }`}
-                  title="List View"
-                >
-                  <MdViewList className="text-sm sm:text-base" />
-                </button>
-              </div>
             </div>
           </div>
 
@@ -250,11 +222,7 @@ const ProjectsList = () => {
             </div>
           ) : (
             <div
-              className={
-                viewMode === 'grid'
-                  ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'
-                  : 'space-y-6'
-              }
+              className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12'
               
             >
               {filteredProjects.map((project, index) => (
@@ -262,7 +230,6 @@ const ProjectsList = () => {
                   key={project._id}
                   project={project}
                   index={index}
-                  viewMode={viewMode}
                   isAdmin={isAdmin}
                   onViewDetails={handleViewDetails}
                   onEdit={handleEdit}
@@ -278,53 +245,133 @@ const ProjectsList = () => {
   )
 }
 
-const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit, onDelete, onFeatureToggle }) => {
+const ProjectCard = ({ project, index, isAdmin, onViewDetails, onEdit, onDelete, onFeatureToggle }) => {
+  // Handle multiple images - use first image or fallback to single image
+  const displayImages = project.images && project.images.length > 0 ? project.images : [project.image];
+  const hasMultipleImages = displayImages.length > 1;
+  
+  // State for image carousel
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Auto-slide effect for multiple images
+  useEffect(() => {
+    if (hasMultipleImages && !isPaused) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => 
+          prevIndex === displayImages.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 4000); // Change image every 4 seconds
+      
+      return () => clearInterval(interval);
+    }
+  }, [hasMultipleImages, displayImages.length, isPaused]);
+  
+  const nextImage = (e) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === displayImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+  
+  const prevImage = (e) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === 0 ? displayImages.length - 1 : prevIndex - 1
+    );
+  };
+  
+  const goToImage = (e, index) => {
+    e.stopPropagation();
+    setCurrentImageIndex(index);
+  };
+
   return (
     <div
-      className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-lg border border-slate-700/50 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 group ${
-        viewMode === 'list' ? 'flex flex-col lg:flex-row h-auto lg:h-80' : 'flex flex-col h-full'
-      }`}
+      className='group relative overflow-hidden rounded-3xl transition-all duration-500 ease-out cursor-pointer transform hover:scale-[1.03] hover:-translate-y-2 flex flex-col h-full max-w-md mx-auto'
+      onClick={() => onViewDetails(project._id)}
+      onMouseEnter={() => {
+        setIsPaused(true);
+        setIsHovered(true);
+      }}
+      onMouseLeave={() => {
+        setIsPaused(false);
+        setIsHovered(false);
+      }}
     >
-      {/* Project Image */}
-      <div className={`relative ${
-        viewMode === 'list' 
-          ? 'h-48 sm:h-56 lg:h-full lg:w-80 flex-shrink-0' 
-          : 'h-48 sm:h-52 lg:h-56'
-      } overflow-hidden`}>
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-        />
+      {/* Card Background with Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl" />
+      
+      {/* Animated Border */}
+      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500/0 via-cyan-500/50 to-purple-500/0 p-px opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="w-full h-full rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
+      </div>
+      
+      {/* Floating Orbs Background */}
+      <div className="absolute inset-0 overflow-hidden rounded-3xl">
+        <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700" />
+        <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-br from-purple-500/15 to-pink-500/15 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-1000" />
+      </div>
+      {/* Image Section with 3D Effect */}
+      <div className='relative z-10 h-64 sm:h-72 overflow-hidden'>
+        {/* Image Container with 3D Transform */}
+        <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700 ease-out">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-20" />
+          
+          {/* Multiple Images with Smooth Transitions */}
+          {displayImages.map((image, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-all duration-1000 ease-out ${
+                index === currentImageIndex 
+                  ? 'opacity-100 scale-100' 
+                  : 'opacity-0 scale-110'
+              }`}
+            >
+              <img
+                src={image}
+                alt={`${project.title} - Image ${index + 1}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+          
+          {/* Shimmer Effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1500 z-30" />
+        </div>
         
-        {/* Overlay Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        {/* Floating Status Badges */}
+        <div className="absolute top-4 left-4 flex flex-col gap-2 z-40">
+          {project.isFeatured && (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold rounded-full shadow-lg backdrop-blur-sm transform group-hover:scale-110 transition-transform duration-300">
+              <FaStar className="text-xs" />
+              <span>Featured</span>
+            </div>
+          )}
+          
+          {hasMultipleImages && (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-black/70 text-white text-xs font-medium rounded-full backdrop-blur-sm">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+              </svg>
+              <span>{currentImageIndex + 1}/{displayImages.length}</span>
+            </div>
+          )}
+        </div>
         
-        {/* Featured Badge */}
-        {project.isFeatured && (
-          <div
-            className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-lg"
-            data-aos="zoom-in"
-            data-aos-duration="400"
-            data-aos-delay="300"
-          >
-            <FaStar className="text-xs" />
-            Featured
-          </div>
-        )}
-
-        {/* Admin Controls Overlay */}
+        {/* Admin Controls - Redesigned */}
         {isAdmin && (
-          <div className="absolute top-4 left-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0">
+          <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-[-10px] group-hover:translate-y-0 z-40">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onFeatureToggle(project);
               }}
-              className={`p-2.5 backdrop-blur-sm text-white rounded-xl transition-all duration-200 shadow-lg ${
+              className={`p-2.5 backdrop-blur-md text-white rounded-xl transition-all duration-200 hover:scale-110 shadow-xl ${
                 project.isFeatured 
-                  ? 'bg-yellow-600/90 hover:bg-yellow-500 hover:shadow-yellow-500/25' 
-                  : 'bg-gray-600/90 hover:bg-gray-500 hover:shadow-gray-500/25'
+                  ? 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:shadow-yellow-400/50' 
+                  : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:shadow-gray-400/50'
               }`}
               title={project.isFeatured ? "Remove from Featured" : "Add to Featured"}
             >
@@ -335,7 +382,7 @@ const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit,
                 e.stopPropagation();
                 onEdit(project._id);
               }}
-              className="p-2.5 bg-blue-600/90 backdrop-blur-sm text-white rounded-xl hover:bg-blue-500 transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
+              className="p-2.5 bg-gradient-to-r from-blue-500 to-blue-600 backdrop-blur-md text-white rounded-xl hover:scale-110 transition-all duration-200 shadow-xl hover:shadow-blue-400/50"
               title="Edit Project"
             >
               <FaEdit className="text-sm" />
@@ -345,26 +392,63 @@ const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit,
                 e.stopPropagation();
                 onDelete(project._id);
               }}
-              className="p-2.5 bg-red-600/90 backdrop-blur-sm text-white rounded-xl hover:bg-red-500 transition-all duration-200 shadow-lg hover:shadow-red-500/25"
+              className="p-2.5 bg-gradient-to-r from-red-500 to-red-600 backdrop-blur-md text-white rounded-xl hover:scale-110 transition-all duration-200 shadow-xl hover:shadow-red-400/50"
               title="Delete Project"
             >
               <FaTrash className="text-sm" />
             </button>
           </div>
         )}
-
-        {/* Quick Action Overlay */}
-        <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+        
+        {/* Navigation Controls for Multiple Images */}
+        {hasMultipleImages && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-black/60 backdrop-blur-sm text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-black/80 hover:scale-110 transition-all duration-300 z-40"
+              title="Previous Image"
+            >
+              <FaChevronLeft className="text-sm" />
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-black/60 backdrop-blur-sm text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-black/80 hover:scale-110 transition-all duration-300 z-40"
+              title="Next Image"
+            >
+              <FaChevronRight className="text-sm" />
+            </button>
+            
+            {/* Image Indicators */}
+            <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-40">
+              {displayImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => goToImage(e, index)}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                    currentImageIndex === index 
+                      ? 'bg-white scale-125 shadow-lg' 
+                      : 'bg-white/60 hover:bg-white/90 hover:scale-110'
+                  }`}
+                  title={`Go to image ${index + 1}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        
+        {/* Floating Action Buttons */}
+        <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 z-40">
           {project.liveLink && (
             <a
               href={project.liveLink}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-emerald-600/90 backdrop-blur-sm text-white rounded-xl hover:bg-emerald-500 transition-all duration-200 text-sm font-medium shadow-lg"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:scale-105 transition-all duration-200 text-sm font-semibold shadow-xl hover:shadow-emerald-400/50 backdrop-blur-sm"
             >
-              <FaExternalLinkAlt className="text-xs" />
-              Live Demo
+              <FaExternalLinkAlt className="text-sm" />
+              <span className="hidden sm:inline">Live Demo</span>
+              <span className="sm:hidden">Demo</span>
             </a>
           )}
           {project.liveVideoUrl && (
@@ -373,98 +457,111 @@ const ProjectCard = ({ project, index, viewMode, isAdmin, onViewDetails, onEdit,
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-red-600/90 backdrop-blur-sm text-white rounded-xl hover:bg-red-500 transition-all duration-200 text-sm font-medium shadow-lg"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:scale-105 transition-all duration-200 text-sm font-semibold shadow-xl hover:shadow-red-400/50 backdrop-blur-sm"
             >
-              <FaVideo className="text-xs" />
-              Video
+              <FaVideo className="text-sm" />
+              <span className="hidden sm:inline">Video</span>
+              <span className="sm:hidden">Video</span>
             </a>
           )}
-          <button
-            onClick={() => onViewDetails(project._id)}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-blue-600/90 backdrop-blur-sm text-white rounded-xl hover:bg-blue-500 transition-all duration-200 text-sm font-medium shadow-lg"
-          >
-            <FaEye className="text-xs" />
-            View Details
-          </button>
         </div>
       </div>
 
-      {/* Project Content */}
-      <div className="p-6 flex-1 flex flex-col">
-        {/* Title */}
-        <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-blue-400 transition-colors duration-300">
-          {project.title}
-        </h3>
+      {/* Content Section with Glass Morphism */}
+      <div className="relative z-10 flex-1 p-6 sm:p-8">
+        {/* Glassmorphism Background */}
+        <div className="absolute inset-0 bg-white/5 backdrop-blur-xl rounded-b-3xl" />
+        
+        <div className="relative z-10">
+          {/* Title with Gradient */}
+          <h3 className="text-xl sm:text-2xl font-bold mb-3 text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-200 bg-clip-text leading-tight group-hover:from-blue-200 group-hover:via-white group-hover:to-cyan-200 transition-all duration-500">
+            {project.title}
+          </h3>
 
-        {/* Description */}
-        <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
-          {project.description}
-        </p>
+          {/* Description with Better Typography */}
+          <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 line-clamp-3 group-hover:text-gray-200 transition-colors duration-300">
+            {project.description}
+          </p>
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.tags.slice(0, viewMode === 'list' ? 5 : 4).map((tag, tagIndex) => (
-            <span
-              key={tagIndex}
-              className="px-3 py-1 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border border-blue-500/30 rounded-full text-xs font-medium hover:from-blue-500/30 hover:to-cyan-500/30 transition-all duration-200"
-            >
-              {tag}
-            </span>
-          ))}
-          {project.tags.length > (viewMode === 'list' ? 5 : 4) && (
-            <span className="px-3 py-1 bg-slate-700/50 text-gray-400 border border-slate-600 rounded-full text-xs">
-              +{project.tags.length - (viewMode === 'list' ? 5 : 4)} more
-            </span>
-          )}
-        </div>
-
-        {/* Bottom Actions */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
-          {/* Source Code Links */}
-          <div className="flex gap-2">
-            {project.clientSourceCode && (
-              <a
-                href={project.clientSourceCode}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="p-2.5 bg-slate-700/50 text-gray-300 rounded-lg hover:bg-slate-600 hover:text-white transition-all duration-200"
-                title="Client Code"
+          {/* Technology Tags with 3D Effect */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {project.tags.slice(0, 6).map((tag, tagIndex) => (
+              <span
+                key={tagIndex}
+                className="px-3 py-1.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-200 border border-blue-400/30 rounded-full text-xs font-medium backdrop-blur-sm hover:from-blue-500/30 hover:to-cyan-500/30 hover:border-blue-300/50 hover:scale-105 hover:text-blue-100 transition-all duration-200 cursor-default shadow-lg"
               >
-                <FaLaptop className="text-sm" />
-              </a>
-            )}
-            {project.serverSourceCode && (
-              <a
-                href={project.serverSourceCode}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="p-2.5 bg-slate-700/50 text-gray-300 rounded-lg hover:bg-slate-600 hover:text-white transition-all duration-200"
-                title="Server Code"
-              >
-                <FaServer className="text-sm" />
-              </a>
+                {tag}
+              </span>
+            ))}
+            {project.tags.length > 6 && (
+              <span className="px-3 py-1.5 bg-slate-600/30 text-gray-300 border border-slate-500/40 rounded-full text-xs font-medium backdrop-blur-sm hover:bg-slate-500/40 hover:text-gray-200 transition-all duration-200 cursor-default">
+                +{project.tags.length - 6}
+              </span>
             )}
           </div>
 
-          {/* View More Button */}
-          <button
-            onClick={() => onViewDetails(project._id)}
-            className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200 flex items-center gap-1"
-          >
-            Learn More
-            <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          {/* Bottom Section with Enhanced Design */}
+          <div className="flex items-center justify-between pt-4 border-t border-white/10">
+            {/* Source Code Links with Better Icons */}
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-gray-400 font-medium">Source:</span>
+              <div className="flex gap-2">
+                {project.clientSourceCode && (
+                  <a
+                    href={project.clientSourceCode}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="p-2.5 bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-300 rounded-xl hover:from-blue-500/30 hover:to-blue-600/30 hover:text-blue-200 hover:scale-110 transition-all duration-200 backdrop-blur-sm border border-blue-400/20"
+                    title="Frontend Code"
+                  >
+                    <FaLaptop className="text-sm" />
+                  </a>
+                )}
+                {project.serverSourceCode && (
+                  <a
+                    href={project.serverSourceCode}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="p-2.5 bg-gradient-to-r from-purple-500/20 to-purple-600/20 text-purple-300 rounded-xl hover:from-purple-500/30 hover:to-purple-600/30 hover:text-purple-200 hover:scale-110 transition-all duration-200 backdrop-blur-sm border border-purple-400/20"
+                    title="Backend Code"
+                  >
+                    <FaServer className="text-sm" />
+                  </a>
+                )}
+                {(!project.clientSourceCode && !project.serverSourceCode) && (
+                  <span className="text-xs text-gray-500 flex items-center px-3 py-2 bg-gray-600/20 rounded-xl backdrop-blur-sm">
+                    <FaGithub className="mr-2 text-sm" />
+                    Private Repository
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Enhanced View Details Button */}
+            <button
+              onClick={() => onViewDetails(project._id)}
+              className="group/btn flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-500 hover:to-cyan-500 hover:scale-105 transition-all duration-200 text-sm font-semibold shadow-lg hover:shadow-blue-500/50 backdrop-blur-sm"
+            >
+              <span>Explore</span>
+              <svg className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5-5 5M6 12h12" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Hover Glow Effect */}
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-cyan-500/5" />
+      {/* Enhanced Shadow and Glow Effects */}
+      <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none">
+        {/* Multiple layered glows */}
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-purple-500/10 blur-xl transform scale-110" />
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-600/5 to-cyan-600/5 blur-2xl transform scale-125" />
       </div>
+
+      {/* Drop Shadow */}
+      <div className="absolute inset-0 rounded-3xl shadow-2xl shadow-black/50 group-hover:shadow-blue-500/20 transition-all duration-500 transform translate-y-4 group-hover:translate-y-8 opacity-50 group-hover:opacity-100 scale-95 group-hover:scale-100" />
     </div>
   )
 }

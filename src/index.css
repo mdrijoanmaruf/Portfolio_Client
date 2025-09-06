@@ -186,9 +186,37 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   }
 }
 
-/* Smooth transitions */
-* {
+/* Smooth transitions for specific elements that don't have Tailwind classes */
+input:not([class*="transition"]), 
+textarea:not([class*="transition"]), 
+select:not([class*="transition"]),
+.no-tailwind-transition {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+/* Ensure transform-gpu for better performance on hover animations */
+.hover-transform, 
+[class*="hover:scale"], 
+[class*="group-hover:scale"],
+[class*="hover:rotate"],
+[class*="hover:translate"] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+}
+
+/* Fix for webkit transform issues */
+.transform {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* Ensure smooth hardware acceleration for transitions */
+.transition-all,
+.transition-transform,
+[class*="duration-"] {
+  will-change: transform, opacity;
 }

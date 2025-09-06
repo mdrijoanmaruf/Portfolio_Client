@@ -45,7 +45,7 @@ const ProjectDetails = () => {
   }
 
   const handleEdit = () => {
-    navigate(`/add-project?edit=${id}`)
+    navigate(`/dashboard/add-project?edit=${id}`)
   }
 
   const handleDelete = async () => {
@@ -210,24 +210,47 @@ const ProjectDetails = () => {
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column - Image and Description */}
+          {/* Left Column - Images and Description */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Project Image */}
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src={project.image}
-                alt={project.title}
-                onLoad={() => setImageLoaded(true)}
-                className={`w-full h-auto transition-opacity duration-500 ${
-                  imageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
-              />
-              {!imageLoaded && (
-                <div className="absolute inset-0 bg-slate-800 animate-pulse flex items-center justify-center">
-                  <FaEye className="text-4xl text-gray-600" />
+            {/* Project Images Gallery */}
+            {project.images && project.images.length > 0 ? (
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold text-white mb-4">Project Gallery</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {project.images.map((imageUrl, index) => (
+                    <div key={index} className="relative rounded-2xl overflow-hidden shadow-2xl">
+                      <img
+                        src={imageUrl}
+                        alt={`${project.title} - Image ${index + 1}`}
+                        className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                        {index + 1} of {project.images.length}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              /* Single Project Image (Fallback) */
+              project.image && (
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    onLoad={() => setImageLoaded(true)}
+                    className={`w-full h-auto transition-opacity duration-500 ${
+                      imageLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                  {!imageLoaded && (
+                    <div className="absolute inset-0 bg-slate-800 animate-pulse flex items-center justify-center">
+                      <FaEye className="text-4xl text-gray-600" />
+                    </div>
+                  )}
+                </div>
+              )
+            )}
 
             {/* Description */}
             <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8">

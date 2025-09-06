@@ -1,5 +1,5 @@
 // API configuration
-const API_BASE_URL = 'https://server-theta-roan.vercel.app/api';
+const API_BASE_URL = 'https://portfolio-server-olive-alpha.vercel.app/api';
 // const API_BASE_URL = 'http://localhost:5000/api';
 
 // Helper function for making API requests
