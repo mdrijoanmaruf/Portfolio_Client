@@ -104,22 +104,19 @@ export const contactsAPI = {
   submit: (contactData) => apiRequest('/contacts', {
     method: 'POST',
     body: JSON.stringify(contactData),
-  }),
+  })
+};
 
-  // Get all contacts (admin only)
-  getAll: (userEmail) => apiRequest(`/contacts?userEmail=${encodeURIComponent(userEmail)}`),
+// Resume Link API functions
+export const resumeAPI = {
+  // Get resume link
+  get: () => apiRequest('/resume'),
 
-  // Mark contact as read (admin only)
-  markAsRead: (id, userEmail) => apiRequest(`/contacts/${id}/read`, {
+  // Update resume link (admin only)
+  update: (link, userEmail) => apiRequest('/resume', {
     method: 'PUT',
-    body: JSON.stringify({ userEmail }),
-  }),
-
-  // Delete contact (admin only)
-  delete: (id, userEmail) => apiRequest(`/contacts/${id}`, {
-    method: 'DELETE',
-    body: JSON.stringify({ userEmail }),
-  }),
+    body: JSON.stringify({ link, userEmail }),
+  })
 };
 
 // Server health check

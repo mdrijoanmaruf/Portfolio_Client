@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import { FiLogOut, FiUser } from 'react-icons/fi';
 import useAuth from '../../Hooks/useAuth';
+import { resumeAPI } from '../../utils/api';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [resumeLink, setResumeLink] = useState('');
   const location = useLocation();
   const { user, signInWithGoogle, logOut, loading } = useAuth();
+
+  // Fetch resume link on component mount
+  useEffect(() => {
+    const fetchResumeLink = async () => {
+      try {
+        const response = await resumeAPI.get();
+        if (response.success && response.data.link) {
+          setResumeLink(response.data.link);
+        }
+      } catch (error) {
+        console.error('Error fetching resume link:', error);
+        // Use fallback link if API fails
+        setResumeLink('https://drive.google.com/uc?export=download&id=1WP6pbZsR_x4b1qlqrzhEZiuDNmSFWqXe');
+      }
+    };
+    
+    fetchResumeLink();
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -70,10 +90,11 @@ const Navbar = () => {
           {/* Right side - Authentication (Desktop) */}
           <div className="hidden md:flex items-center">
             <a
-              href="https://drive.google.com/uc?export=download&id=1WP6pbZsR_x4b1qlqrzhEZiuDNmSFWqXe"
+              href={resumeLink}
               target="_blank"
               rel="noopener noreferrer"
               className="px-5 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-cyan-400 hover:to-blue-500 transition-all duration-300 text-sm"
+              style={{ display: resumeLink ? 'block' : 'none' }}
             >
               Resume
             </a>
@@ -117,16 +138,18 @@ const Navbar = () => {
           })}
           
           {/* Resume Button for Mobile */}
-          <div className="px-4 py-3 border-t border-slate-600">
-            <a
-              href="https://drive.google.com/uc?export=download&id=1WP6pbZsR_x4b1qlqrzhEZiuDNmSFWqXe"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full text-center px-5 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-cyan-400 hover:to-blue-500 transition-all duration-300 text-base"
-            >
-              Resume
-            </a>
-          </div>
+          {resumeLink && (
+            <div className="px-4 py-3 border-t border-slate-600">
+              <a
+                href={resumeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-center px-5 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-cyan-400 hover:to-blue-500 transition-all duration-300 text-base"
+              >
+                Resume
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </nav>
